@@ -1,76 +1,76 @@
 @import "tailwindcss";
 
 @theme {
-  /* === Brand tier (raw palette) ===
+    /* === Brand tier (raw palette) ===
      These are placeholder values. Swap to the real Riverflow palette when
      branding is decided. Only the semantic tier below is used by components. */
-  --color-brand-50: oklch(0.97 0.02 280);
-  --color-brand-100: oklch(0.93 0.04 280);
-  --color-brand-200: oklch(0.87 0.07 280);
-  --color-brand-300: oklch(0.78 0.11 280);
-  --color-brand-400: oklch(0.68 0.15 280);
-  --color-brand-500: oklch(0.58 0.19 280);
-  --color-brand-600: oklch(0.49 0.2 280);
-  --color-brand-700: oklch(0.41 0.18 280);
-  --color-brand-800: oklch(0.33 0.14 280);
-  --color-brand-900: oklch(0.25 0.1 280);
+    --color-brand-50: oklch(0.97 0.02 280);
+    --color-brand-100: oklch(0.93 0.04 280);
+    --color-brand-200: oklch(0.87 0.07 280);
+    --color-brand-300: oklch(0.78 0.11 280);
+    --color-brand-400: oklch(0.68 0.15 280);
+    --color-brand-500: oklch(0.58 0.19 280);
+    --color-brand-600: oklch(0.49 0.2 280);
+    --color-brand-700: oklch(0.41 0.18 280);
+    --color-brand-800: oklch(0.33 0.14 280);
+    --color-brand-900: oklch(0.25 0.1 280);
 
-  /* === Semantic tier (what components reference) === */
-  --color-background: white;
-  --color-foreground: oklch(0.14 0 0);
-  --color-muted: oklch(0.96 0 0);
-  --color-muted-foreground: oklch(0.55 0 0);
-  --color-border: oklch(0.9 0 0);
-  --color-input: oklch(0.9 0 0);
-  --color-ring: var(--color-brand-500);
-  --color-primary: var(--color-brand-600);
-  --color-primary-foreground: white;
-  --color-secondary: oklch(0.96 0 0);
-  --color-secondary-foreground: oklch(0.14 0 0);
-  --color-accent: oklch(0.96 0 0);
-  --color-accent-foreground: oklch(0.14 0 0);
-  --color-destructive: oklch(0.58 0.22 27);
-  --color-destructive-foreground: white;
-  --color-card: white;
-  --color-card-foreground: oklch(0.14 0 0);
-  --color-popover: white;
-  --color-popover-foreground: oklch(0.14 0 0);
+    /* === Semantic tier (what components reference) === */
+    --color-background: white;
+    --color-foreground: oklch(0.14 0 0);
+    --color-muted: oklch(0.96 0 0);
+    --color-muted-foreground: oklch(0.55 0 0);
+    --color-border: oklch(0.9 0 0);
+    --color-input: oklch(0.9 0 0);
+    --color-ring: var(--color-brand-500);
+    --color-primary: var(--color-brand-600);
+    --color-primary-foreground: white;
+    --color-secondary: oklch(0.96 0 0);
+    --color-secondary-foreground: oklch(0.14 0 0);
+    --color-accent: oklch(0.96 0 0);
+    --color-accent-foreground: oklch(0.14 0 0);
+    --color-destructive: oklch(0.58 0.22 27);
+    --color-destructive-foreground: white;
+    --color-card: white;
+    --color-card-foreground: oklch(0.14 0 0);
+    --color-popover: white;
+    --color-popover-foreground: oklch(0.14 0 0);
 
-  /* === Radii & layout === */
-  --radius: 0.5rem;
+    /* === Radii & layout === */
+    --radius: 0.5rem;
 }
 
 /* Dark mode tokens — defined but not wired to a toggle in Slice A.
    Respects the OS preference by default. */
 @media (prefers-color-scheme: dark) {
-  @theme {
-    --color-background: oklch(0.14 0 0);
-    --color-foreground: oklch(0.98 0 0);
-    --color-muted: oklch(0.22 0 0);
-    --color-muted-foreground: oklch(0.72 0 0);
-    --color-border: oklch(0.26 0 0);
-    --color-input: oklch(0.26 0 0);
-    --color-card: oklch(0.18 0 0);
-    --color-card-foreground: oklch(0.98 0 0);
-    --color-popover: oklch(0.18 0 0);
-    --color-popover-foreground: oklch(0.98 0 0);
-    --color-secondary: oklch(0.26 0 0);
-    --color-secondary-foreground: oklch(0.98 0 0);
-    --color-accent: oklch(0.26 0 0);
-    --color-accent-foreground: oklch(0.98 0 0);
-  }
+    @theme {
+        --color-background: oklch(0.14 0 0);
+        --color-foreground: oklch(0.98 0 0);
+        --color-muted: oklch(0.22 0 0);
+        --color-muted-foreground: oklch(0.72 0 0);
+        --color-border: oklch(0.26 0 0);
+        --color-input: oklch(0.26 0 0);
+        --color-card: oklch(0.18 0 0);
+        --color-card-foreground: oklch(0.98 0 0);
+        --color-popover: oklch(0.18 0 0);
+        --color-popover-foreground: oklch(0.98 0 0);
+        --color-secondary: oklch(0.26 0 0);
+        --color-secondary-foreground: oklch(0.98 0 0);
+        --color-accent: oklch(0.26 0 0);
+        --color-accent-foreground: oklch(0.98 0 0);
+    }
 }
 
 /* === Base styles === */
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
-  }
+    * {
+        border-color: var(--color-border);
+    }
+    body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        font-feature-settings:
+            "rlig" 1,
+            "calt" 1;
+    }
 }

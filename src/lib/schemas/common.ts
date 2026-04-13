@@ -6,7 +6,7 @@ import { z } from "zod";
  * matching that shape. Don't tighten without checking actual production IDs.
  */
 export const CuidSchema = z.string().regex(/^[a-z0-9]{20,30}$/, {
-  message: "Expected a Prisma cuid",
+    message: "Expected a Prisma cuid",
 });
 
 /**
@@ -14,11 +14,11 @@ export const CuidSchema = z.string().regex(/^[a-z0-9]{20,30}$/, {
  * Mirrors src/services/product.service.ts -> searchProductsHandler response.
  */
 export const PaginationSchema = z.object({
-  total: z.number().int().nonnegative(),
-  page: z.number().int().positive(),
-  limit: z.number().int().positive(),
-  totalPages: z.number().int().nonnegative(),
-  hasNextPage: z.boolean(),
+    total: z.number().int().nonnegative(),
+    page: z.number().int().positive(),
+    limit: z.number().int().positive(),
+    totalPages: z.number().int().nonnegative(),
+    hasNextPage: z.boolean(),
 });
 
 /**
@@ -29,10 +29,10 @@ export const PaginationSchema = z.object({
  *   const parsed = ProductsPage.parse(jsonFromBackend);
  */
 export function PageSchema<T extends z.ZodTypeAny>(item: T) {
-  return z.object({
-    data: z.array(item),
-    pagination: PaginationSchema,
-  });
+    return z.object({
+        data: z.array(item),
+        pagination: PaginationSchema,
+    });
 }
 
 /**
@@ -40,10 +40,10 @@ export function PageSchema<T extends z.ZodTypeAny>(item: T) {
  * Use this when there's no body to validate.
  */
 export const SuccessFlagSchema = z.object({
-  success: z.literal(true),
+    success: z.literal(true),
 });
 
 export type Page<T> = {
-  data: T[];
-  pagination: z.infer<typeof PaginationSchema>;
+    data: T[];
+    pagination: z.infer<typeof PaginationSchema>;
 };
