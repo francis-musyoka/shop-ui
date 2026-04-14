@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Lora } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,6 +13,13 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
+const lora = Lora({
+    variable: "--font-brand",
+    subsets: ["latin"],
+    weight: ["400", "700"],
+    style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
     title: "Riverflow — Kenya's Vibrant Marketplace",
     description:
@@ -22,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html
             lang="en"
-            className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+            className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} h-full antialiased`}
         >
             <body className="flex min-h-full flex-col">{children}</body>
         </html>
