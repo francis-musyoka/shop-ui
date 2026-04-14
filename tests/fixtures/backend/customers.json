@@ -1,0 +1,44 @@
+{
+    "signupSuccess": {
+        "success": true,
+        "customer": { "id": "cl9ebqhxk00003b6093z6n3kc" }
+    },
+    "signupValidationError": {
+        "success": false,
+        "error": [
+            "firstName: must be at least 2 characters",
+            "password: must include at least one uppercase letter"
+        ]
+    },
+    "signinSuccess": { "success": true },
+    "signinInvalidCredentials": {
+        "success": false,
+        "error": "Invalid email or password"
+    },
+    "profileSuccess": {
+        "authenticated": true,
+        "success": true,
+        "data": {
+            "id": "cl9ebqhxk00003b6093z6n3kc",
+            "email": "user@example.com",
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "userRole": {
+                "id": "cl9ebqhxk00004role0000001",
+                "name": "CUSTOMER",
+                "permissions": ["PRODUCT_VIEW", "OFFER_VIEW"]
+            }
+        }
+    },
+    "forgotPasswordSuccess": {
+        "success": true,
+        "message": "OTP sent to email"
+    },
+    "verifyOtpSuccess": { "success": true },
+    "verifyOtpInvalid": {
+        "success": false,
+        "error": "Invalid or expired OTP"
+    },
+    "refreshTokenSuccess": { "success": true },
+    "logoutSuccess": { "success": true }
+}

@@ -1,0 +1,10 @@
+{
+    "generic500": {
+        "success": false,
+        "error": "Internal Server Error"
+    },
+    "validationErrorArray": {
+        "success": false,
+        "error": ["email: must be a valid email", "phone: must be at least 10 characters"]
+    }
+}

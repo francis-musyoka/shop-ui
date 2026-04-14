@@ -3,53 +3,53 @@
 # Install (idempotent): npx lefthook install  — invoked by `npm install` via `prepare`.
 
 pre-commit:
-  parallel: true
-  commands:
-    lint-staged:
-      run: npx lint-staged
-    typecheck:
-      glob: "*.{ts,tsx}"
-      run: npx tsc-files --noEmit {staged_files}
-    env-guard:
-      run: |
-        if git diff --cached --name-only | grep -E '^\.env($|\.local$|\.production$)'; then
-          echo "ERROR: .env files must not be committed (except .env.example)"
-          exit 1
-        fi
-    lockfile-sync:
-      run: |
-        if git diff --cached --name-only | grep -q '^package\.json$'; then
-          if ! git diff --cached --name-only | grep -q '^package-lock\.json$'; then
-            # package.json staged, package-lock.json not staged.
-            # Only block if the lockfile actually has unstaged changes (drift).
-            # If it matches HEAD, there's nothing to stage — that's fine.
-            if ! git diff --quiet HEAD -- package-lock.json 2>/dev/null; then
-              echo "ERROR: package.json is staged but package-lock.json has unstaged changes."
-              echo "Run 'git add package-lock.json' (or 'npm install' then stage the lockfile)."
-              exit 1
-            fi
-          fi
-        fi
-    merge-markers:
-      run: |
-        if git diff --cached | grep -E '^\+(<<<<<<<|=======|>>>>>>>)' > /dev/null; then
-          echo "ERROR: merge conflict markers detected in staged changes"
-          exit 1
-        fi
-    gitleaks:
-      run: |
-        if command -v gitleaks >/dev/null 2>&1; then
-          gitleaks protect --staged --no-banner --redact
-        else
-          echo "WARN: gitleaks not installed, skipping secret scan"
-        fi
+    parallel: true
+    commands:
+        lint-staged:
+            run: npx lint-staged
+        typecheck:
+            glob: "*.{ts,tsx}"
+            run: npx tsc-files --noEmit {staged_files}
+        env-guard:
+            run: |
+                if git diff --cached --name-only | grep -E '^\.env($|\.local$|\.production$)'; then
+                  echo "ERROR: .env files must not be committed (except .env.example)"
+                  exit 1
+                fi
+        lockfile-sync:
+            run: |
+                if git diff --cached --name-only | grep -q '^package\.json$'; then
+                  if ! git diff --cached --name-only | grep -q '^package-lock\.json$'; then
+                    # package.json staged, package-lock.json not staged.
+                    # Only block if the lockfile actually has unstaged changes (drift).
+                    # If it matches HEAD, there's nothing to stage — that's fine.
+                    if ! git diff --quiet HEAD -- package-lock.json 2>/dev/null; then
+                      echo "ERROR: package.json is staged but package-lock.json has unstaged changes."
+                      echo "Run 'git add package-lock.json' (or 'npm install' then stage the lockfile)."
+                      exit 1
+                    fi
+                  fi
+                fi
+        merge-markers:
+            run: |
+                if git diff --cached | grep -E '^\+(<<<<<<<|=======|>>>>>>>)' > /dev/null; then
+                  echo "ERROR: merge conflict markers detected in staged changes"
+                  exit 1
+                fi
+        gitleaks:
+            run: |
+                if command -v gitleaks >/dev/null 2>&1; then
+                  gitleaks protect --staged --no-banner --redact
+                else
+                  echo "WARN: gitleaks not installed, skipping secret scan"
+                fi
 
 commit-msg:
-  commands:
-    commitlint:
-      run: npx commitlint --edit {1}
+    commands:
+        commitlint:
+            run: npx commitlint --edit {1}
 
 pre-push:
-  commands:
-    test:
-      run: npm test
+    commands:
+        test:
+            run: npm test
