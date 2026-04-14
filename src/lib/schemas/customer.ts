@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CuidSchema, SuccessFlagSchema } from "./common";
+import { CUID, SuccessFlagSchema } from "./common";
 
 /**
  * Password rule shared across signup, reset, and update-password.
@@ -25,13 +25,13 @@ const OtpCodeSchema = z.string().length(6, "Code must be exactly 6 characters");
 /* ─────────────────────────── Customer entity ─────────────────────────── */
 
 export const UserRoleSchema = z.object({
-    id: CuidSchema,
+    id: CUID,
     name: z.string(),
     permissions: z.array(z.string()),
 });
 
 export const CustomerSchema = z.object({
-    id: CuidSchema,
+    id: CUID,
     email: z.string().email(),
     firstName: z.string(),
     lastName: z.string(),
@@ -60,7 +60,7 @@ export type SignupRequest = z.infer<typeof SignupRequestSchema>;
 
 export const SignupResponseSchema = z.object({
     success: z.literal(true),
-    customer: z.object({ id: CuidSchema }),
+    customer: z.object({ id: CUID }),
 });
 
 export type SignupResponse = z.infer<typeof SignupResponseSchema>;
