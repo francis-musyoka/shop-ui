@@ -1,23 +1,23 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { CuidSchema, PageSchema, SuccessFlagSchema } from "./common";
+import { CUID, PageSchema, SuccessFlagSchema } from "./common";
 
 describe("CuidSchema", () => {
     it("accepts a typical Prisma cuid", () => {
-        expect(CuidSchema.parse("cl9ebqhxk00003b6093z6n3kc")).toBe("cl9ebqhxk00003b6093z6n3kc");
+        expect(CUID.parse("cl9ebqhxk00003b6093z6n3kc")).toBe("cl9ebqhxk00003b6093z6n3kc");
     });
 
     it("rejects non-cuid strings", () => {
-        expect(() => CuidSchema.parse("not-a-cuid")).toThrow();
+        expect(() => CUID.parse("not-a-cuid")).toThrow();
     });
 
     it("rejects empty string", () => {
-        expect(() => CuidSchema.parse("")).toThrow();
+        expect(() => CUID.parse("")).toThrow();
     });
 });
 
 describe("PageSchema(T)", () => {
-    const ItemSchema = z.object({ id: CuidSchema, name: z.string() });
+    const ItemSchema = z.object({ id: CUID, name: z.string() });
     const PageOfItem = PageSchema(ItemSchema);
 
     it("parses a backend pagination response shape", () => {

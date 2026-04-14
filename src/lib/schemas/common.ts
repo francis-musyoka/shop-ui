@@ -5,7 +5,7 @@ import { z } from "zod";
  * lowercase alphanumeric, ~25 chars. We accept any non-empty string
  * matching that shape. Don't tighten without checking actual production IDs.
  */
-export const CuidSchema = z.string().regex(/^[a-z0-9]{20,30}$/, {
+export const CUID = z.string().regex(/^[a-z0-9]{20,30}$/, {
     message: "Expected a Prisma cuid",
 });
 
