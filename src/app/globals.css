@@ -47,8 +47,10 @@
     --radius: 0.125rem;
 }
 
+/* Dark mode overrides. Uses :root not @theme — Tailwind v4's @theme
+   doesn't gate correctly inside @media; these must be scoped via :root. */
 @media (prefers-color-scheme: dark) {
-    @theme {
+    :root {
         --color-background: oklch(0.14 0.005 160);
         --color-foreground: oklch(0.98 0 0);
         --color-muted: oklch(0.22 0 0);

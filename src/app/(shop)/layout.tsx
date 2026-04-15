@@ -7,7 +7,7 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
 
     return (
         <>
-            <header className="border-border bg-brand-800 border-b">
+            <header className="border-border bg-brand-800 dark:bg-brand-900 border-b">
                 <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
                     <Link
                         href="/"
