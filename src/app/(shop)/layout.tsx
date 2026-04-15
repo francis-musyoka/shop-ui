@@ -1,13 +1,21 @@
-export default function ShopLayout({ children }: { children: React.ReactNode }) {
+import Link from "next/link";
+import { getSession } from "@/lib/auth/session";
+import { Navbar } from "@/components/layout/navbar";
+
+export default async function ShopLayout({ children }: { children: React.ReactNode }) {
+    const session = await getSession();
+
     return (
         <>
-            <header className="border-border bg-background border-b">
-                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-                    <div className="text-lg font-semibold">Riverflow</div>
-                    <nav className="text-muted-foreground text-sm">
-                        {/* Navbar components land in Plan 03/04 */}
-                        <span>Nav placeholder</span>
-                    </nav>
+            <header className="border-border bg-brand-800 border-b">
+                <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
+                    <Link
+                        href="/"
+                        className="font-[family-name:var(--font-brand)] text-lg font-bold text-white"
+                    >
+                        Riverflow
+                    </Link>
+                    <Navbar user={session?.user ?? null} />
                 </div>
             </header>
             <div className="flex-1">{children}</div>
