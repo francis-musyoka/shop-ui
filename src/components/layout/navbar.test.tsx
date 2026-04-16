@@ -22,14 +22,14 @@ const mockUser = {
 
 describe("Navbar", () => {
     describe("when user is null (logged out)", () => {
-        it("renders Sign in and Sign up buttons with correct hrefs", () => {
+        it("renders Account and Sign up links with correct hrefs", () => {
             render(<Navbar user={null} />);
 
-            const signIn = screen.getByRole("button", { name: /sign in/i });
-            const signUp = screen.getByRole("button", { name: /sign up/i });
+            const accountLink = screen.getByRole("link", { name: /account/i });
+            const signUp = screen.getByRole("link", { name: /sign up/i });
 
-            expect(signIn).toBeInTheDocument();
-            expect(signIn).toHaveAttribute("href", "/signin");
+            expect(accountLink).toBeInTheDocument();
+            expect(accountLink).toHaveAttribute("href", "/signin");
             expect(signUp).toBeInTheDocument();
             expect(signUp).toHaveAttribute("href", "/signup");
         });
