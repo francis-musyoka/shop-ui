@@ -1,0 +1,170 @@
+{
+    "searchSuccess": {
+        "success": true,
+        "data": [
+            {
+                "id": "cl9ebqhxk00010prod0000001",
+                "title": "Samsung Galaxy S24 Ultra",
+                "slug": "samsung-galaxy-s24-ultra",
+                "specs": {
+                    "display": "6.8\" QHD+ AMOLED",
+                    "battery": "5000 mAh",
+                    "ram": "12 GB"
+                },
+                "brand": { "name": "Samsung", "slug": "samsung" },
+                "category": { "name": "Phones", "slug": "phones" },
+                "images": [
+                    {
+                        "id": "cl9ebqhxk00020img00000001",
+                        "url": "https://res.cloudinary.com/demo/image/upload/sample.jpg"
+                    }
+                ],
+                "variants": [
+                    {
+                        "id": "cl9ebqhxk00030var00000001",
+                        "attributes": { "storage": "256gb", "color": "black" },
+                        "colorHex": "#000000"
+                    }
+                ],
+                "lowestPrice": 145000
+            },
+            {
+                "id": "cl9ebqhxk00010prod0000002",
+                "title": "iPhone 15 Pro Max",
+                "slug": "iphone-15-pro-max",
+                "specs": {
+                    "display": "6.7\" Super Retina XDR",
+                    "battery": "4441 mAh"
+                },
+                "brand": { "name": "Apple", "slug": "apple" },
+                "category": { "name": "Phones", "slug": "phones" },
+                "images": [
+                    {
+                        "id": "cl9ebqhxk00020img00000002",
+                        "url": "https://res.cloudinary.com/demo/image/upload/sample2.jpg"
+                    }
+                ],
+                "variants": [
+                    {
+                        "id": "cl9ebqhxk00030var00000002",
+                        "attributes": { "storage": "512gb", "color": "titanium" },
+                        "colorHex": "#8B8589"
+                    }
+                ],
+                "lowestPrice": 199000
+            }
+        ],
+        "pagination": {
+            "total": 120,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 6,
+            "hasNextPage": true
+        }
+    },
+    "searchEmpty": {
+        "success": true,
+        "data": [],
+        "pagination": {
+            "total": 0,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 0,
+            "hasNextPage": false
+        }
+    },
+    "detailSuccess": {
+        "success": true,
+        "product": {
+            "id": "cl9ebqhxk00010prod0000001",
+            "title": "Samsung Galaxy S24 Ultra",
+            "slug": "samsung-galaxy-s24-ultra",
+            "description": "The Samsung Galaxy S24 Ultra features a stunning 6.8-inch display with built-in S Pen.",
+            "specs": {
+                "display": "6.8\" QHD+ AMOLED",
+                "battery": "5000 mAh",
+                "ram": "12 GB"
+            },
+            "status": "ACTIVE",
+            "createdAt": "2025-01-15T10:30:00.000Z",
+            "category": {
+                "id": "cl9ebqhxk00040cat00000001",
+                "name": "Phones",
+                "slug": "phones"
+            },
+            "brand": {
+                "id": "cl9ebqhxk00050brd00000001",
+                "name": "Samsung",
+                "slug": "samsung"
+            },
+            "images": [
+                {
+                    "id": "cl9ebqhxk00020img00000001",
+                    "url": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                    "order": 0
+                },
+                {
+                    "id": "cl9ebqhxk00020img00000003",
+                    "url": "https://res.cloudinary.com/demo/image/upload/sample3.jpg",
+                    "order": 1
+                }
+            ],
+            "variants": [
+                {
+                    "id": "cl9ebqhxk00030var00000001",
+                    "attributes": { "storage": "256gb", "color": "black" },
+                    "colorHex": "#000000",
+                    "images": [
+                        {
+                            "id": "cl9ebqhxk00020img00000004",
+                            "url": "https://res.cloudinary.com/demo/image/upload/variant1.jpg",
+                            "order": 0
+                        }
+                    ],
+                    "offers": [
+                        {
+                            "id": "cl9ebqhxk00060off00000001",
+                            "price": "150000",
+                            "discount": "5",
+                            "quantityTotal": 10,
+                            "quantityAvailable": 7,
+                            "condition": "NEW",
+                            "status": "ACTIVE",
+                            "deliveryDays": 3,
+                            "warrantyMonths": 12,
+                            "isFeatured": false,
+                            "location": "Nairobi",
+                            "finalPrice": 142500,
+                            "shop": {
+                                "id": "cl9ebqhxk00070shp00000001",
+                                "name": "TechHub Kenya",
+                                "slug": "techhub-kenya",
+                                "rating": "4.5"
+                            }
+                        },
+                        {
+                            "id": "cl9ebqhxk00060off00000002",
+                            "price": "145000",
+                            "discount": "0",
+                            "quantityTotal": 3,
+                            "quantityAvailable": 3,
+                            "condition": "NEW",
+                            "status": "ACTIVE",
+                            "deliveryDays": 5,
+                            "warrantyMonths": 24,
+                            "isFeatured": true,
+                            "location": "Mombasa",
+                            "finalPrice": 145000,
+                            "shop": {
+                                "id": "cl9ebqhxk00070shp00000002",
+                                "name": "Gadget World",
+                                "slug": "gadget-world",
+                                "rating": "4.2"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

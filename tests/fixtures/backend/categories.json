@@ -1,0 +1,77 @@
+{
+    "treeSuccess": {
+        "success": true,
+        "categories": [
+            {
+                "id": "cl9ebqhxk00040cat00000001",
+                "name": "Electronics",
+                "slug": "electronics",
+                "children": [
+                    {
+                        "id": "cl9ebqhxk00040cat00000002",
+                        "name": "Phones",
+                        "slug": "phones",
+                        "children": [
+                            {
+                                "id": "cl9ebqhxk00040cat00000003",
+                                "name": "Smartphones",
+                                "slug": "smartphones",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "id": "cl9ebqhxk00040cat00000004",
+                        "name": "Laptops",
+                        "slug": "laptops",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "id": "cl9ebqhxk00040cat00000010",
+                "name": "Fashion",
+                "slug": "fashion",
+                "children": [
+                    {
+                        "id": "cl9ebqhxk00040cat00000011",
+                        "name": "Men's Clothing",
+                        "slug": "mens-clothing",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    },
+    "topLevelSuccess": {
+        "success": true,
+        "categories": [
+            { "id": "cl9ebqhxk00040cat00000001", "name": "Electronics", "slug": "electronics" },
+            { "id": "cl9ebqhxk00040cat00000010", "name": "Fashion", "slug": "fashion" },
+            { "id": "cl9ebqhxk00040cat00000020", "name": "Home & Garden", "slug": "home-garden" }
+        ]
+    },
+    "bySlugSuccess": {
+        "success": true,
+        "category": {
+            "id": "cl9ebqhxk00040cat00000002",
+            "name": "Phones",
+            "slug": "phones",
+            "parent": {
+                "id": "cl9ebqhxk00040cat00000001",
+                "name": "Electronics",
+                "slug": "electronics"
+            },
+            "children": [
+                { "id": "cl9ebqhxk00040cat00000003", "name": "Smartphones", "slug": "smartphones" }
+            ]
+        }
+    },
+    "breadcrumbSuccess": {
+        "success": true,
+        "breadcrumb": [
+            { "id": "cl9ebqhxk00040cat00000001", "name": "Electronics", "slug": "electronics" },
+            { "id": "cl9ebqhxk00040cat00000002", "name": "Phones", "slug": "phones" }
+        ]
+    }
+}

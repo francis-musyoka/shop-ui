@@ -1,0 +1,10 @@
+{
+    "listSuccess": {
+        "success": true,
+        "brands": [
+            { "id": "cl9ebqhxk00050brd00000001", "name": "Samsung", "slug": "samsung" },
+            { "id": "cl9ebqhxk00050brd00000002", "name": "Apple", "slug": "apple" },
+            { "id": "cl9ebqhxk00050brd00000003", "name": "Nokia", "slug": "nokia" }
+        ]
+    }
+}
