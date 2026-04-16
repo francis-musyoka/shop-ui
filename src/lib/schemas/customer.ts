@@ -32,7 +32,7 @@ export const UserRoleSchema = z.object({
 
 export const CustomerSchema = z.object({
     id: CUID,
-    email: z.string().email(),
+    email: z.email(),
     firstName: z.string(),
     lastName: z.string(),
     userRole: UserRoleSchema,
@@ -46,7 +46,7 @@ export const SignupRequestSchema = z
     .object({
         firstName: NameSchema,
         lastName: NameSchema,
-        email: z.string().email(),
+        email: z.email(),
         phone: PhoneSchema,
         password: PasswordSchema,
         confirmPassword: z.string(),
@@ -68,7 +68,7 @@ export type SignupResponse = z.infer<typeof SignupResponseSchema>;
 /* ──────────────────────────── Signin ──────────────────────────── */
 
 export const SigninRequestSchema = z.object({
-    email: z.string().email(),
+    email: z.email(),
     password: z.string().min(1, "Password is required"),
 });
 
@@ -115,7 +115,7 @@ export type UpdatePasswordRequest = z.infer<typeof UpdatePasswordRequestSchema>;
 /* ─────────────────────── Password reset flow ─────────────────────── */
 
 export const ForgotPasswordRequestSchema = z.object({
-    email: z.string().email(),
+    email: z.email(),
 });
 
 export type ForgotPasswordRequest = z.infer<typeof ForgotPasswordRequestSchema>;
@@ -126,7 +126,7 @@ export const ForgotPasswordResponseSchema = z.object({
 });
 
 export const VerifyOtpRequestSchema = z.object({
-    email: z.string().email(),
+    email: z.email(),
     code: OtpCodeSchema,
 });
 

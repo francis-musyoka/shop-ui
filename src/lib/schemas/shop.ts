@@ -29,7 +29,7 @@ export const ShopProductSchema = z.object({
     status: z.string(),
     images: z.array(
         z.object({
-            url: z.string().url(),
+            url: z.url(),
             order: z.number().int().nonnegative(),
         }),
     ),
@@ -40,7 +40,7 @@ export const ShopPublicSchema = z.object({
     name: z.string(),
     slug: z.string(),
     description: z.string(),
-    email: z.string().email(),
+    email: z.email(),
     phone: z.string(),
     logoUrl: z.string().nullish(),
     bannerUrl: z.string().nullish(),

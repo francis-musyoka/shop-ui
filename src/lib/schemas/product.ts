@@ -5,7 +5,7 @@ import { CUID, PaginationSchema } from "./common";
 
 export const ImageSchema = z.object({
     id: CUID,
-    url: z.string().url(),
+    url: z.url(),
 });
 
 export const OrderedImageSchema = ImageSchema.extend({
