@@ -6,7 +6,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <div className="w-full max-w-[380px]">
                 <Link
                     href="/"
-                    className="text-brand-800 mb-6 block text-center font-[family-name:var(--font-brand)] text-xl font-bold"
+                    className="text-brand-800 dark:text-brand-200 mb-6 block text-center font-[family-name:var(--font-brand)] text-xl font-bold"
                 >
                     Riverflow
                 </Link>

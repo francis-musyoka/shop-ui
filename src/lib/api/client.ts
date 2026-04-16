@@ -1,7 +1,7 @@
 import "server-only";
 import { z } from "zod";
 import { env } from "@/lib/env";
-import { readCookieHeader, writeCookie } from "@/lib/auth/cookie-store";
+import { readCookieHeader, writeCookie, deleteCookie } from "@/lib/auth/cookie-store";
 import { parseAllSetCookies } from "@/lib/auth/forward-cookies";
 import { ApiError, parseBackendError } from "./errors";
 
@@ -155,7 +155,11 @@ async function forwardSetCookieHeaders(response: Response): Promise<void> {
     if (setCookies.length === 0) return;
     const parsed = parseAllSetCookies(setCookies);
     for (const c of parsed) {
-        await writeCookie({ name: c.name, value: c.value, maxAge: c.maxAge, path: c.path });
+        if (c.deletion) {
+            await deleteCookie(c.name, c.path);
+        } else {
+            await writeCookie({ name: c.name, value: c.value, maxAge: c.maxAge, path: c.path });
+        }
     }
 }
 

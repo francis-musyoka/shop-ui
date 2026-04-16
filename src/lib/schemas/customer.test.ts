@@ -201,8 +201,18 @@ describe("UpdatePasswordRequestSchema", () => {
             UpdatePasswordRequestSchema.parse({
                 currentPassword: "Strong1Pass!",
                 newPassword: "Another2Pass!",
-                currentPasswordConfirm: "Strong1Pass!",
+                currentPasswordConfirm: "Another2Pass!",
             }),
         ).toBeDefined();
+    });
+
+    it("rejects when currentPasswordConfirm does not match newPassword", () => {
+        expect(() =>
+            UpdatePasswordRequestSchema.parse({
+                currentPassword: "Strong1Pass!",
+                newPassword: "Another2Pass!",
+                currentPasswordConfirm: "Strong1Pass!",
+            }),
+        ).toThrow();
     });
 });

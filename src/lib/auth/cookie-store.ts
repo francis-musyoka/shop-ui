@@ -8,6 +8,11 @@ import { cookies } from "next/headers";
  * In Next 16, cookies() is async. We await it once per call.
  */
 
+export async function readCookie(name: string): Promise<string | undefined> {
+    const store = await cookies();
+    return store.get(name)?.value;
+}
+
 export async function readCookieHeader(): Promise<string | undefined> {
     const store = await cookies();
     const all = store.getAll();
@@ -33,5 +38,25 @@ export async function writeCookie(opts: SetCookieOptions): Promise<void> {
         sameSite: "lax",
         path: opts.path ?? "/",
         ...(typeof opts.maxAge === "number" ? { maxAge: opts.maxAge } : {}),
+    });
+}
+
+/**
+ * Delete a cookie by setting it with maxAge: 0. Next's cookies().set() with
+ * maxAge: 0 emits an Expires=0 Set-Cookie header that tells the browser to
+ * remove the cookie. Must pass the same path the cookie was set with, or
+ * the browser may keep a matching cookie at a different path.
+ */
+export async function deleteCookie(name: string, path?: string): Promise<void> {
+    const store = await cookies();
+    const isProd = process.env.NODE_ENV === "production";
+    store.set({
+        name,
+        value: "",
+        httpOnly: true,
+        secure: isProd,
+        sameSite: "lax",
+        path: path ?? "/",
+        maxAge: 0,
     });
 }
