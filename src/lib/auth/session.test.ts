@@ -19,7 +19,6 @@ const getProfileMock = getProfile as unknown as Mock;
 
 describe("getSession", () => {
     beforeEach(() => {
-        vi.resetModules();
         getProfileMock.mockReset();
     });
 

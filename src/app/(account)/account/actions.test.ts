@@ -11,21 +11,36 @@ vi.mock("@/lib/env", () => ({
 vi.mock("next/navigation", () => ({
     redirect: vi.fn(),
 }));
+vi.mock("next/cache", () => ({
+    revalidatePath: vi.fn(),
+}));
 vi.mock("@/lib/api/customers", () => ({
+    getProfile: vi.fn(),
     updateProfile: vi.fn(),
     updatePassword: vi.fn(),
     logout: vi.fn(),
 }));
 
 import { redirect } from "next/navigation";
-import { updateProfile, updatePassword, logout } from "@/lib/api/customers";
+import { revalidatePath } from "next/cache";
+import { getProfile, updateProfile, updatePassword, logout } from "@/lib/api/customers";
 import { ApiError } from "@/lib/api/errors";
 import { updateProfileAction, updatePasswordAction, logoutAction } from "./actions";
 
+const getProfileMock = getProfile as unknown as Mock;
 const updateProfileMock = updateProfile as unknown as Mock;
 const updatePasswordMock = updatePassword as unknown as Mock;
 const logoutMock = logout as unknown as Mock;
 const redirectMock = redirect as unknown as Mock;
+const revalidatePathMock = revalidatePath as unknown as Mock;
+
+const mockUser = {
+    id: "cl9ebqhxk00003b6093z6n3kc",
+    email: "jane@example.com",
+    firstName: "Jane",
+    lastName: "Doe",
+    userRole: { id: "role1", name: "CUSTOMER", permissions: [] },
+};
 
 function makeFormData(data: Record<string, string>): FormData {
     const fd = new FormData();
@@ -37,7 +52,9 @@ function makeFormData(data: Record<string, string>): FormData {
 
 describe("updateProfileAction", () => {
     beforeEach(() => {
+        getProfileMock.mockReset().mockResolvedValue(mockUser);
         updateProfileMock.mockReset();
+        revalidatePathMock.mockReset();
         redirectMock.mockReset();
     });
 
@@ -67,6 +84,7 @@ describe("updateProfileAction", () => {
             firstName: "Jane",
             lastName: "Doe",
         });
+        expect(revalidatePathMock).toHaveBeenCalledWith("/account");
         expect(result).toEqual({ success: true });
     });
 
@@ -95,6 +113,7 @@ describe("updateProfileAction", () => {
 
 describe("updatePasswordAction", () => {
     beforeEach(() => {
+        getProfileMock.mockReset().mockResolvedValue(mockUser);
         updatePasswordMock.mockReset();
         redirectMock.mockReset();
     });
@@ -140,7 +159,7 @@ describe("updatePasswordAction", () => {
         const fd = makeFormData({
             currentPassword: "OldStrong1!",
             newPassword: "NewStrong2!",
-            currentPasswordConfirm: "OldStrong1!",
+            currentPasswordConfirm: "NewStrong2!",
         });
 
         const result = await updatePasswordAction(null, fd);
@@ -148,7 +167,7 @@ describe("updatePasswordAction", () => {
         expect(updatePasswordMock).toHaveBeenCalledWith({
             currentPassword: "OldStrong1!",
             newPassword: "NewStrong2!",
-            currentPasswordConfirm: "OldStrong1!",
+            currentPasswordConfirm: "NewStrong2!",
         });
         expect(result).toEqual({ success: true });
     });
@@ -164,7 +183,7 @@ describe("updatePasswordAction", () => {
         const fd = makeFormData({
             currentPassword: "WrongOld1!",
             newPassword: "NewStrong2!",
-            currentPasswordConfirm: "WrongOld1!",
+            currentPasswordConfirm: "NewStrong2!",
         });
 
         const result = await updatePasswordAction(null, fd);
@@ -177,7 +196,7 @@ describe("updatePasswordAction", () => {
         const fd = makeFormData({
             currentPassword: "OldStrong1!",
             newPassword: "NewStrong2!",
-            currentPasswordConfirm: "OldStrong1!",
+            currentPasswordConfirm: "NewStrong2!",
         });
 
         await expect(updatePasswordAction(null, fd)).rejects.toThrow("Network failure");
@@ -186,6 +205,7 @@ describe("updatePasswordAction", () => {
 
 describe("logoutAction", () => {
     beforeEach(() => {
+        getProfileMock.mockReset().mockResolvedValue(mockUser);
         logoutMock.mockReset();
         redirectMock.mockReset();
     });

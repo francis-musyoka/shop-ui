@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { updateProfile, updatePassword, logout } from "@/lib/api/customers";
 import { ApiError } from "@/lib/api/errors";
 import { UpdateProfileRequestSchema, UpdatePasswordRequestSchema } from "@/lib/schemas/customer";
@@ -28,6 +29,7 @@ export async function updateProfileAction(
         throw err;
     }
 
+    revalidatePath("/account");
     return { success: true };
 }
 
