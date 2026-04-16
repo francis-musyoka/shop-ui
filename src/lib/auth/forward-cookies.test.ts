@@ -17,14 +17,31 @@ describe("parseSetCookieHeader", () => {
         expect(result?.maxAge).toBe(600);
     });
 
-    it("ignores Max-Age=0 (cookie deletion is treated as a delete signal)", () => {
+    it("flags Max-Age=0 as a deletion", () => {
         const result = parseSetCookieHeader("foo=; Max-Age=0; Path=/");
         expect(result).toEqual({
             name: "foo",
             value: "",
             maxAge: 0,
             path: "/",
+            deletion: true,
         });
+    });
+
+    it("flags Expires in the past as a deletion", () => {
+        const result = parseSetCookieHeader("foo=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/");
+        expect(result?.deletion).toBe(true);
+        expect(result?.path).toBe("/");
+    });
+
+    it("flags empty-value cookies as a deletion", () => {
+        const result = parseSetCookieHeader("foo=; Path=/");
+        expect(result?.deletion).toBe(true);
+    });
+
+    it("does not flag normal cookies as a deletion", () => {
+        const result = parseSetCookieHeader("foo=bar; Max-Age=600; Path=/");
+        expect(result?.deletion).toBeUndefined();
     });
 
     it("parses HttpOnly and Secure as boolean flags", () => {

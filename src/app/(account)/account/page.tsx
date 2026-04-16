@@ -1,13 +1,11 @@
-import { getSession } from "@/lib/auth/session";
-import { redirect } from "next/navigation";
+import { requireAuth } from "@/lib/auth/require-auth";
 import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "./profile-form";
 import { PasswordForm } from "./password-form";
 import { logoutAction } from "./actions";
 
 export default async function AccountPage() {
-    const session = await getSession();
-    if (!session) redirect("/signin");
+    const session = await requireAuth();
 
     return (
         <div className="space-y-8">

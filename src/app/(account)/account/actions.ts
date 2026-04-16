@@ -5,11 +5,13 @@ import { updateProfile, updatePassword, logout } from "@/lib/api/customers";
 import { ApiError } from "@/lib/api/errors";
 import { UpdateProfileRequestSchema, UpdatePasswordRequestSchema } from "@/lib/schemas/customer";
 import type { ActionState } from "@/lib/types/action-state";
+import { requireAuth } from "@/lib/auth/require-auth";
 
 export async function updateProfileAction(
     _prev: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
+    await requireAuth();
     const raw = Object.fromEntries(formData);
     const parsed = UpdateProfileRequestSchema.safeParse(raw);
 
@@ -33,6 +35,7 @@ export async function updatePasswordAction(
     _prev: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
+    await requireAuth();
     const raw = Object.fromEntries(formData);
     const parsed = UpdatePasswordRequestSchema.safeParse(raw);
 
@@ -53,6 +56,7 @@ export async function updatePasswordAction(
 }
 
 export async function logoutAction(): Promise<void> {
+    await requireAuth();
     try {
         await logout();
     } catch {

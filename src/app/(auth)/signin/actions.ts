@@ -23,6 +23,7 @@ export async function signinAction(_prev: ActionState, formData: FormData): Prom
         throw err;
     }
 
-    const next = formData.get("next")?.toString() || "/";
+    const rawNext = formData.get("next")?.toString() ?? "";
+    const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
     redirect(next);
 }

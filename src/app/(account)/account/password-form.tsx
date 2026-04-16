@@ -42,9 +42,9 @@ export function PasswordForm() {
 
             <FormField
                 name="currentPasswordConfirm"
-                label="Confirm current password"
+                label="Confirm new password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 error={state?.fieldErrors?.currentPasswordConfirm?.[0]}
             />
 

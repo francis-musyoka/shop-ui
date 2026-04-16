@@ -17,6 +17,8 @@ export interface ParsedSetCookie {
     maxAge?: number;
     httpOnly?: boolean;
     secure?: boolean;
+    /** True if the backend is deleting this cookie (Max-Age=0, Expires in the past, or empty value). */
+    deletion?: boolean;
 }
 
 /**
@@ -44,6 +46,8 @@ export function parseSetCookieHeader(header: string): ParsedSetCookie | null {
         value: safeDecode(rawValue),
     };
 
+    let expiresInPast = false;
+
     for (const seg of segments.slice(1)) {
         const lower = seg.toLowerCase();
         if (lower === "httponly") {
@@ -55,8 +59,20 @@ export function parseSetCookieHeader(header: string): ParsedSetCookie | null {
         } else if (lower.startsWith("max-age=")) {
             const n = Number(seg.slice("max-age=".length));
             if (Number.isFinite(n)) result.maxAge = n;
+        } else if (lower.startsWith("expires=")) {
+            const dateStr = seg.slice("expires=".length);
+            const when = Date.parse(dateStr);
+            if (Number.isFinite(when) && when <= Date.now()) {
+                expiresInPast = true;
+            }
         }
-        // Ignore Domain, Expires, SameSite, etc. — we'll set our own.
+        // Ignore Domain, SameSite — we set our own.
+    }
+
+    // Detect deletion: Max-Age=0, Expires in the past, or empty value.
+    // Backends signal "delete this cookie" with any of these patterns.
+    if (result.maxAge === 0 || expiresInPast || result.value === "") {
+        result.deletion = true;
     }
 
     return result;

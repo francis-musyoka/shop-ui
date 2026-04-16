@@ -104,6 +104,10 @@ export const UpdatePasswordRequestSchema = z
     .refine((d) => d.newPassword !== d.currentPassword, {
         message: "New password must differ from current password",
         path: ["newPassword"],
+    })
+    .refine((d) => d.newPassword === d.currentPasswordConfirm, {
+        message: "Passwords do not match",
+        path: ["currentPasswordConfirm"],
     });
 
 export type UpdatePasswordRequest = z.infer<typeof UpdatePasswordRequestSchema>;
