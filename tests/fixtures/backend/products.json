@@ -85,14 +85,7 @@
                     "stock": 1
                 }
             }
-        ],
-        "pagination": {
-            "total": 2,
-            "page": 1,
-            "limit": 12,
-            "totalPages": 1,
-            "hasNextPage": false
-        }
+        ]
     },
     "detailSuccess": {
         "success": true,

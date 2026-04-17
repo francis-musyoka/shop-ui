@@ -5,6 +5,8 @@ import {
     type SearchProductsResponse,
     SearchProductsResponseSchema,
     type NewestListingsParams,
+    type NewestListingsResponse,
+    NewestListingsResponseSchema,
     type ProductDetail,
     ProductDetailResponseSchema,
 } from "@/lib/schemas/product";
@@ -27,14 +29,14 @@ export async function searchProducts(
 
 /**
  * Newest listings with category diversification.
- * Returns { data: ProductCard[], pagination } — same envelope as search.
+ * Returns { data: ProductCard[] } — no pagination envelope (fixed-size carousel).
  */
 export async function getNewestListings(
     params: NewestListingsParams = {},
-): Promise<SearchProductsResponse> {
+): Promise<NewestListingsResponse> {
     return apiFetch({
         path: "/api/products/newest",
-        schema: SearchProductsResponseSchema,
+        schema: NewestListingsResponseSchema,
         query: params as Record<string, string | number | boolean | undefined>,
         forwardCookies: false,
         cache: "no-store",

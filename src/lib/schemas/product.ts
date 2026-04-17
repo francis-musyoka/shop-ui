@@ -86,6 +86,17 @@ export const NewestListingsParamsSchema = z.object({
 
 export type NewestListingsParams = z.infer<typeof NewestListingsParamsSchema>;
 
+/* ── Newest listings response ────────────────────────── */
+
+// Backend powers a fixed-size carousel, not a paginated list, so no
+// pagination envelope is returned — see online-shop-backend improvements.md §21.
+export const NewestListingsResponseSchema = z.object({
+    success: z.literal(true),
+    data: z.array(ProductCardSchema),
+});
+
+export type NewestListingsResponse = z.infer<typeof NewestListingsResponseSchema>;
+
 /* ── Offer (nested inside variant on detail page) ────── */
 
 export const OfferShopRefSchema = z.object({
