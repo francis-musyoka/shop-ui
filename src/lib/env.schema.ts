@@ -9,8 +9,8 @@ import { z } from "zod";
  * destination is validated with the same URL rules as `env.ts`.
  */
 export const EnvSchema = z.object({
-    BACKEND_API_URL: z.string().url({ message: "BACKEND_API_URL must be a valid URL" }),
-    NEXT_PUBLIC_APP_URL: z.string().url({ message: "NEXT_PUBLIC_APP_URL must be a valid URL" }),
+    BACKEND_API_URL: z.url({ message: "BACKEND_API_URL must be a valid URL" }),
+    NEXT_PUBLIC_APP_URL: z.url({ message: "NEXT_PUBLIC_APP_URL must be a valid URL" }),
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 });
 

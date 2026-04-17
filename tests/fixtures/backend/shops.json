@@ -1,0 +1,55 @@
+{
+    "detailSuccess": {
+        "success": true,
+        "shop": {
+            "id": "cl9ebqhxk00070shp00000001",
+            "name": "TechHub Kenya",
+            "slug": "techhub-kenya",
+            "description": "Your go-to shop for quality electronics in Nairobi.",
+            "email": "info@techhub.co.ke",
+            "phone": "+254700000001",
+            "logoUrl": "https://res.cloudinary.com/demo/image/upload/techhub-logo.jpg",
+            "bannerUrl": null,
+            "businessType": "REGISTERED",
+            "websiteLink": "https://techhub.co.ke",
+            "facebook": null,
+            "instagram": null,
+            "tiktok": null,
+            "rating": "4.5",
+            "isVerified": true,
+            "status": "ACTIVE",
+            "shopAddress": {
+                "id": "cl9ebqhxk00080adr00000001",
+                "street": "Moi Avenue",
+                "city": "Nairobi",
+                "state": null,
+                "country": "Kenya",
+                "postalCode": "00100"
+            },
+            "owner": {
+                "id": "cl9ebqhxk00003b6093z6n3kc",
+                "firstName": "James",
+                "lastName": "Mwangi"
+            },
+            "category": {
+                "id": "cl9ebqhxk00040cat00000001",
+                "name": "Electronics",
+                "slug": "electronics"
+            },
+            "contributedProducts": [
+                {
+                    "id": "cl9ebqhxk00010prod0000001",
+                    "title": "Samsung Galaxy S24 Ultra",
+                    "slug": "samsung-galaxy-s24-ultra",
+                    "status": "ACTIVE",
+                    "images": [
+                        {
+                            "url": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                            "order": 0
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
