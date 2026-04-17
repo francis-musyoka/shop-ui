@@ -49,7 +49,8 @@ export async function getCategoryBySlug(slug: string): Promise<CategoryBySlug> {
         path: `/api/categories/${slug}`,
         schema: CategoryBySlugResponseSchema,
         forwardCookies: false,
-        cache: "no-store",
+        cache: "force-cache",
+        tags: ["categories"],
     });
     return res.category;
 }
@@ -62,7 +63,8 @@ export async function getCategoryBreadcrumb(slug: string): Promise<BreadcrumbIte
         path: `/api/categories/${slug}/breadcrumb`,
         schema: CategoryBreadcrumbResponseSchema,
         forwardCookies: false,
-        cache: "no-store",
+        cache: "force-cache",
+        tags: ["categories"],
     });
     return res.breadcrumb;
 }

@@ -15,7 +15,7 @@ vi.mock("@/lib/auth/cookie-store", () => ({
 }));
 
 import productFixtures from "../../../tests/fixtures/backend/products.json";
-import { searchProducts, getProductBySlug } from "./products";
+import { searchProducts, getNewestListings, getProductBySlug } from "./products";
 
 beforeEach(() => {
     vi.restoreAllMocks();
@@ -51,6 +51,25 @@ describe("searchProducts", () => {
         mockFetchResponse(productFixtures.searchEmpty);
         const result = await searchProducts({ search: "nonexistent" });
         expect(result.data).toHaveLength(0);
+    });
+});
+
+describe("getNewestListings", () => {
+    it("returns parsed newest listings", async () => {
+        mockFetchResponse(productFixtures.newestSuccess);
+        const result = await getNewestListings();
+        expect(result.data).toHaveLength(2);
+        expect(result.data[0]!.buybox.condition).toBe("NEW");
+    });
+
+    it("calls /api/products/newest with query params", async () => {
+        mockFetchResponse(productFixtures.newestSuccess);
+        await getNewestListings({ limit: 12, perCategory: 3 });
+        const fetchCall = (globalThis.fetch as Mock).mock.calls[0]!;
+        const url = fetchCall[0] as string;
+        expect(url).toContain("/api/products/newest");
+        expect(url).toContain("limit=12");
+        expect(url).toContain("perCategory=3");
     });
 });
 

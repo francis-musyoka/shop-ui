@@ -4,54 +4,33 @@
         "data": [
             {
                 "id": "cl9ebqhxk00010prod0000001",
-                "title": "Samsung Galaxy S24 Ultra",
                 "slug": "samsung-galaxy-s24-ultra",
-                "specs": {
-                    "display": "6.8\" QHD+ AMOLED",
-                    "battery": "5000 mAh",
-                    "ram": "12 GB"
-                },
-                "brand": { "name": "Samsung", "slug": "samsung" },
-                "category": { "name": "Phones", "slug": "phones" },
-                "images": [
-                    {
-                        "id": "cl9ebqhxk00020img00000001",
-                        "url": "https://res.cloudinary.com/demo/image/upload/sample.jpg"
-                    }
-                ],
-                "variants": [
-                    {
-                        "id": "cl9ebqhxk00030var00000001",
-                        "attributes": { "storage": "256gb", "color": "black" },
-                        "colorHex": "#000000"
-                    }
-                ],
-                "lowestPrice": 145000
+                "title": "Samsung Galaxy S24 Ultra",
+                "mainImageUrl": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                "variantCount": 3,
+                "offerCount": 5,
+                "buybox": {
+                    "price": 145000,
+                    "originalPrice": 160000,
+                    "discountPercent": 9.375,
+                    "condition": "NEW",
+                    "stock": 8
+                }
             },
             {
                 "id": "cl9ebqhxk00010prod0000002",
-                "title": "iPhone 15 Pro Max",
                 "slug": "iphone-15-pro-max",
-                "specs": {
-                    "display": "6.7\" Super Retina XDR",
-                    "battery": "4441 mAh"
-                },
-                "brand": { "name": "Apple", "slug": "apple" },
-                "category": { "name": "Phones", "slug": "phones" },
-                "images": [
-                    {
-                        "id": "cl9ebqhxk00020img00000002",
-                        "url": "https://res.cloudinary.com/demo/image/upload/sample2.jpg"
-                    }
-                ],
-                "variants": [
-                    {
-                        "id": "cl9ebqhxk00030var00000002",
-                        "attributes": { "storage": "512gb", "color": "titanium" },
-                        "colorHex": "#8B8589"
-                    }
-                ],
-                "lowestPrice": 199000
+                "title": "iPhone 15 Pro Max",
+                "mainImageUrl": "https://res.cloudinary.com/demo/image/upload/sample2.jpg",
+                "variantCount": 2,
+                "offerCount": 3,
+                "buybox": {
+                    "price": 199000,
+                    "originalPrice": null,
+                    "discountPercent": null,
+                    "condition": "NEW",
+                    "stock": 4
+                }
             }
         ],
         "pagination": {
@@ -70,6 +49,48 @@
             "page": 1,
             "limit": 20,
             "totalPages": 0,
+            "hasNextPage": false
+        }
+    },
+    "newestSuccess": {
+        "success": true,
+        "data": [
+            {
+                "id": "cl9ebqhxk00010prod0000001",
+                "slug": "samsung-galaxy-s24-ultra",
+                "title": "Samsung Galaxy S24 Ultra",
+                "mainImageUrl": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                "variantCount": 3,
+                "offerCount": 5,
+                "buybox": {
+                    "price": 145000,
+                    "originalPrice": 160000,
+                    "discountPercent": 9.375,
+                    "condition": "NEW",
+                    "stock": 8
+                }
+            },
+            {
+                "id": "cl9ebqhxk00010prod0000003",
+                "slug": "sony-wh-1000xm5",
+                "title": "Sony WH-1000XM5 Headphones",
+                "mainImageUrl": "https://res.cloudinary.com/demo/image/upload/headphones.jpg",
+                "variantCount": 1,
+                "offerCount": 2,
+                "buybox": {
+                    "price": 42000,
+                    "originalPrice": null,
+                    "discountPercent": null,
+                    "condition": "USED",
+                    "stock": 1
+                }
+            }
+        ],
+        "pagination": {
+            "total": 2,
+            "page": 1,
+            "limit": 12,
+            "totalPages": 1,
             "hasNextPage": false
         }
     },

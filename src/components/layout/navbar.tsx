@@ -28,7 +28,7 @@ export function Navbar({ user }: NavbarProps) {
                         render={
                             <button
                                 type="button"
-                                className="flex items-center gap-2 rounded-sm border border-transparent px-2 py-1 hover:border-white/30 focus-visible:border-white/30 focus-visible:outline-none"
+                                className="flex items-center gap-2 rounded-md border border-transparent px-2 py-1 hover:border-white/30 focus-visible:border-white/30 focus-visible:outline-none"
                                 aria-label="Account menu"
                             >
                                 <Avatar className="size-7">
@@ -84,7 +84,7 @@ export function Navbar({ user }: NavbarProps) {
                 <div className="flex items-center gap-1">
                     <Link
                         href="/signin"
-                        className="flex items-center gap-2 rounded-sm border border-transparent px-3 py-1 hover:border-white/30"
+                        className="flex items-center gap-2 rounded-md border border-transparent px-3 py-1 hover:border-white/30"
                     >
                         <User className="size-5 text-white/80" />
                         <div className="hidden sm:block">
@@ -98,7 +98,7 @@ export function Navbar({ user }: NavbarProps) {
                     </Link>
                     <Link
                         href="/signup"
-                        className="bg-accent text-accent-foreground hover:bg-gold-500 ml-1 rounded-sm px-4 py-2 text-sm font-semibold transition-colors duration-100"
+                        className="bg-accent text-accent-foreground hover:bg-gold-500 ml-1 rounded-md px-4 py-2 text-sm font-semibold transition-colors duration-100"
                     >
                         Sign up
                     </Link>

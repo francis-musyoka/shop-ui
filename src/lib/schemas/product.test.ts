@@ -13,21 +13,30 @@ describe("ProductCardSchema", () => {
         const card = productFixtures.searchSuccess.data[0];
         const parsed = ProductCardSchema.parse(card);
         expect(parsed.title).toBe("Samsung Galaxy S24 Ultra");
-        expect(parsed.lowestPrice).toBe(145000);
-        expect(parsed.brand.slug).toBe("samsung");
-        expect(parsed.variants).toHaveLength(1);
+        expect(parsed.mainImageUrl).toContain("https://");
+        expect(parsed.variantCount).toBe(3);
+        expect(parsed.offerCount).toBe(5);
+        expect(parsed.buybox.price).toBe(145000);
+        expect(parsed.buybox.condition).toBe("NEW");
+        expect(parsed.buybox.stock).toBe(8);
     });
 
-    it("accepts null lowestPrice", () => {
-        const card = { ...productFixtures.searchSuccess.data[0], lowestPrice: null };
+    it("accepts null originalPrice and discountPercent when no discount", () => {
+        const card = productFixtures.searchSuccess.data[1];
         const parsed = ProductCardSchema.parse(card);
-        expect(parsed.lowestPrice).toBeNull();
+        expect(parsed.buybox.originalPrice).toBeNull();
+        expect(parsed.buybox.discountPercent).toBeNull();
     });
 
     it("rejects missing title", () => {
         const noTitle = { ...productFixtures.searchSuccess.data[0]! };
         delete (noTitle as Record<string, unknown>).title;
         expect(() => ProductCardSchema.parse(noTitle)).toThrow();
+    });
+
+    it("rejects invalid mainImageUrl", () => {
+        const badUrl = { ...productFixtures.searchSuccess.data[0]!, mainImageUrl: "not-a-url" };
+        expect(() => ProductCardSchema.parse(badUrl)).toThrow();
     });
 });
 

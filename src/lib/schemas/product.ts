@@ -30,16 +30,24 @@ export const CategoryRefSchema = z.object({
 
 /* ── Product card (search results, landing grid) ─────── */
 
+export const BuyboxSchema = z.object({
+    price: z.number().nonnegative(),
+    originalPrice: z.number().nonnegative().nullable(),
+    discountPercent: z.number().min(0).max(100).nullable(),
+    condition: z.enum(["NEW", "USED", "REFURBISHED"]),
+    stock: z.number().int().nonnegative(),
+});
+
+export type Buybox = z.infer<typeof BuyboxSchema>;
+
 export const ProductCardSchema = z.object({
     id: CUID,
-    title: z.string(),
     slug: z.string(),
-    specs: z.record(z.string(), z.string()).optional(),
-    brand: BrandRefSchema,
-    category: CategoryRefSchema,
-    images: z.array(ImageSchema),
-    variants: z.array(VariantSummarySchema),
-    lowestPrice: z.number().nullable(),
+    title: z.string(),
+    mainImageUrl: z.url(),
+    variantCount: z.number().int().nonnegative(),
+    offerCount: z.number().int().nonnegative(),
+    buybox: BuyboxSchema,
 });
 
 export type ProductCard = z.infer<typeof ProductCardSchema>;
@@ -68,6 +76,15 @@ export const SearchProductsParamsSchema = z.object({
 });
 
 export type SearchProductsParams = z.infer<typeof SearchProductsParamsSchema>;
+
+/* ── Newest listings query params ────────────────────── */
+
+export const NewestListingsParamsSchema = z.object({
+    limit: z.coerce.number().int().min(1).max(50).optional(),
+    perCategory: z.coerce.number().int().min(1).max(10).optional(),
+});
+
+export type NewestListingsParams = z.infer<typeof NewestListingsParamsSchema>;
 
 /* ── Offer (nested inside variant on detail page) ────── */
 
