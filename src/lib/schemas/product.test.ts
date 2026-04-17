@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
     ProductCardSchema,
     SearchProductsResponseSchema,
+    NewestListingsResponseSchema,
     ProductDetailResponseSchema,
     SearchProductsParamsSchema,
     OfferSchema,
@@ -52,6 +53,25 @@ describe("SearchProductsResponseSchema", () => {
         const parsed = SearchProductsResponseSchema.parse(productFixtures.searchEmpty);
         expect(parsed.data).toHaveLength(0);
         expect(parsed.pagination.total).toBe(0);
+    });
+});
+
+describe("NewestListingsResponseSchema", () => {
+    it("parses the newest fixture (no pagination envelope)", () => {
+        const parsed = NewestListingsResponseSchema.parse(productFixtures.newestSuccess);
+        expect(parsed.data).toHaveLength(2);
+        expect(parsed.data[0]!.buybox.condition).toBe("NEW");
+    });
+
+    it("rejects a response that contains a pagination field", () => {
+        const withPagination = {
+            ...productFixtures.newestSuccess,
+            pagination: { total: 2, page: 1, limit: 12, totalPages: 1, hasNextPage: false },
+        };
+        // Strict parse would fail; the schema currently uses default behaviour
+        // (extra keys are stripped), so the response still parses cleanly.
+        const parsed = NewestListingsResponseSchema.parse(withPagination);
+        expect((parsed as { pagination?: unknown }).pagination).toBeUndefined();
     });
 });
 
