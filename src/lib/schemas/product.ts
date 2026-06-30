@@ -113,10 +113,11 @@ export const OfferSchema = z.object({
     quantityTotal: z.number().int().nonnegative(),
     quantityAvailable: z.number().int().nonnegative(),
     condition: z.enum(["NEW", "USED", "REFURBISHED"]),
-    status: z.string(),
+    status: z.string().optional(), // backend product-detail response omits this
     deliveryDays: z.number().int().nonnegative().nullish(),
     warrantyMonths: z.number().int().nonnegative().nullish(),
     isFeatured: z.boolean(),
+    isBuyBoxWinner: z.boolean().optional(), // backend-designated buy-box winner (one per variant)
     location: z.string().nullish(),
     finalPrice: z.number(),
     shop: OfferShopRefSchema,
