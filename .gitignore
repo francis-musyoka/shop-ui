@@ -51,3 +51,9 @@ AGENTS.md
 CLAUDE.md
 .superpowers/*
 .playwright-mcp/
+
+# UI mockups — local-only prototypes used before writing plans (see docs/superpowers/workflows/ui-resolution.md)
+/src/app/mockups/
+
+# Local commit map (planning notes, not source)
+/COMMITS.md
