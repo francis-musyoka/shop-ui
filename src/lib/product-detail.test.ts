@@ -73,6 +73,19 @@ describe("selectBestOffer", () => {
         const onlySold = offer({ id: "only", quantityAvailable: 0, status: "PAUSED" });
         expect(selectBestOffer([onlySold])?.id).toBe("only");
     });
+
+    it("excludes sold-out offers in the fallback when status is absent (production shape)", () => {
+        // The backend omits `status`; a missing status counts as sellable, but a
+        // sold-out cheaper offer must still not win over an in-stock pricier one.
+        const sold = offer({
+            id: "sold",
+            status: undefined,
+            finalPrice: 800,
+            quantityAvailable: 0,
+        });
+        const ok = offer({ id: "ok", status: undefined, finalPrice: 1000, quantityAvailable: 4 });
+        expect(selectBestOffer([sold, ok])?.id).toBe("ok");
+    });
 });
 
 describe("deriveBuybox", () => {
@@ -94,7 +107,6 @@ describe("deriveBuybox", () => {
         expect(box!.discountPercent).toBe(15);
         expect(box!.stock).toBe(7);
         expect(box!.condition).toBe("NEW");
-        expect(box!.offerCount).toBe(1);
     });
 
     it("has no strike/discount when finalPrice equals price", () => {

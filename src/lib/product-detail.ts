@@ -8,20 +8,22 @@ export type DerivedBuybox = {
     discountPercent: number | null;
     condition: Offer["condition"];
     stock: number;
-    offerCount: number;
     offer: Offer;
 } | null;
 
 /**
  * The backend flags the buy-box winner per variant (`isBuyBoxWinner`) — trust it
- * when present. Fallback when none is flagged: sellable (active + in stock) first,
- * then featured, then cheapest, then most stock.
+ * when present. Fallback when none is flagged: in-stock offers first (the backend
+ * omits `status`, so a missing status is treated as sellable), then featured,
+ * then cheapest, then most stock.
  */
 export function selectBestOffer(offers: Offer[]): Offer | null {
     if (offers.length === 0) return null;
     const winner = offers.find((o) => o.isBuyBoxWinner);
     if (winner) return winner;
-    const sellable = offers.filter((o) => o.status === "ACTIVE" && o.quantityAvailable > 0);
+    const sellable = offers.filter(
+        (o) => o.quantityAvailable > 0 && (o.status == null || o.status === "ACTIVE"),
+    );
     const pool = sellable.length > 0 ? sellable : offers;
     return [...pool].sort(
         (a, b) =>
@@ -42,7 +44,6 @@ export function deriveBuybox(variant: DetailVariant | undefined): DerivedBuybox 
         discountPercent: discounted ? Math.round((1 - best.finalPrice / best.price) * 100) : null,
         condition: best.condition,
         stock: best.quantityAvailable,
-        offerCount: offers.length,
         offer: best,
     };
 }
