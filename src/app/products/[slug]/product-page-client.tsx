@@ -12,6 +12,7 @@ import { VariantSelector } from "@/components/shop/variant-selector";
 import { ConditionBadge } from "@/components/shop/condition-badge";
 import { OfferList } from "@/components/shop/offer-list";
 import { deriveBuybox, findVariant, galleryImageUrls } from "@/lib/product-detail";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 import { FEATURES } from "@/lib/features";
 
 function formatPrice(amount: number): string {
@@ -32,6 +33,7 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
     const offers = variant?.offers ?? [];
 
     const [offersOpen, setOffersOpen] = useState(false);
+    const offersRef = useModalA11y(offersOpen);
     useEffect(() => {
         if (!offersOpen) return;
         function onKey(e: KeyboardEvent) {
@@ -95,6 +97,11 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                                     </Badge>
                                 )}
                             </div>
+                            {buybox.stock === 0 && (
+                                <p className="text-destructive mt-1 text-sm font-semibold">
+                                    Out of stock
+                                </p>
+                            )}
                             {buybox.stock > 0 && buybox.stock <= 10 && (
                                 <p className="text-gold-500 dark:text-gold-300 mt-1 text-sm font-semibold">
                                     Only {buybox.stock} left in stock — order soon
@@ -189,10 +196,12 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
             {/* Available offers drawer — slides in from the right */}
             {offersOpen && (
                 <div
-                    className="fixed inset-0 z-50 flex"
+                    ref={offersRef}
+                    className="fixed inset-0 z-50 flex outline-none"
                     role="dialog"
                     aria-modal="true"
                     aria-label="Available offers"
+                    tabIndex={-1}
                 >
                     <div
                         className="fixed inset-0 bg-black/50"

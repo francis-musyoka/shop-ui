@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
 import Image from "next/image";
 import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 type ProductGalleryProps = {
     images: string[];
@@ -37,6 +38,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
     }, [count]);
 
     const [lightboxOpen, setLightboxOpen] = useState(false);
+    const lightboxRef = useModalA11y(lightboxOpen);
     const showPrev = useCallback(() => setActive((a) => (a - 1 + count) % count), [count]);
     const showNext = useCallback(() => setActive((a) => (a + 1) % count), [count]);
 
@@ -139,11 +141,13 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
 
             {lightboxOpen && (
                 <div
+                    ref={lightboxRef}
                     role="dialog"
                     aria-modal="true"
                     aria-label={`${title} image viewer`}
+                    tabIndex={-1}
                     onClick={() => setLightboxOpen(false)}
-                    className="bg-foreground/90 fixed inset-0 z-50 flex items-center justify-center p-4"
+                    className="bg-foreground/90 fixed inset-0 z-50 flex items-center justify-center p-4 outline-none"
                 >
                     <button
                         type="button"
