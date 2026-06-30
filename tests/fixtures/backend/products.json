@@ -143,10 +143,10 @@
                             "quantityTotal": 10,
                             "quantityAvailable": 7,
                             "condition": "NEW",
-                            "status": "ACTIVE",
                             "deliveryDays": 3,
                             "warrantyMonths": 12,
                             "isFeatured": false,
+                            "isBuyBoxWinner": true,
                             "location": "Nairobi",
                             "finalPrice": 142500,
                             "shop": {
@@ -163,10 +163,10 @@
                             "quantityTotal": 3,
                             "quantityAvailable": 3,
                             "condition": "NEW",
-                            "status": "ACTIVE",
                             "deliveryDays": 5,
                             "warrantyMonths": 24,
                             "isFeatured": true,
+                            "isBuyBoxWinner": false,
                             "location": "Mombasa",
                             "finalPrice": 145000,
                             "shop": {
