@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Mockups are gitignored, so Tailwind's auto content-detection skips them.
+   Register the dir so classes used only in mockups still get generated. */
+@source "./mockups";
+
 @theme {
     /* === Brand tier — Kenya earth tones (forest green, hue 160) === */
     --color-brand-50: oklch(0.97 0.02 160);
