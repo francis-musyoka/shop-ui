@@ -23,7 +23,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
     return (
         <>
-            <SiteHeader user={null} categories={[]} />
+            <SiteHeader />
 
             <div className="mx-auto max-w-7xl px-4 md:px-6">
                 <nav className="text-muted-foreground flex items-center gap-1 py-3 text-sm">

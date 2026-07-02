@@ -1,28 +1,23 @@
 import Link from "next/link";
 import { getTopLevelCategories } from "@/lib/api/categories";
 import { getNewestListings } from "@/lib/api/products";
-import { getSession } from "@/lib/auth/session";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Footer } from "@/components/layout/footer";
 import { PageContainer } from "@/components/layout/page-container";
 import { ListingCard } from "@/components/shop/listing-card";
 
 export default async function LandingPage() {
-    const [categoriesResult, productsResult, session] = await Promise.allSettled([
+    const [categoriesResult, productsResult] = await Promise.allSettled([
         getTopLevelCategories(),
         getNewestListings({ limit: 12, perCategory: 3 }),
-        getSession(),
     ]);
 
     const categories = categoriesResult.status === "fulfilled" ? categoriesResult.value : [];
     const products = productsResult.status === "fulfilled" ? productsResult.value.data : [];
-    const user = session.status === "fulfilled" ? (session.value?.user ?? null) : null;
 
     return (
         <>
-            <SiteHeader user={user} categories={categories} />
-
-            {/* Newest listings */}
+            <SiteHeader />
             {products.length > 0 && (
                 <section className="px-4 py-5 md:px-6">
                     <div className="mb-3 flex items-start justify-between gap-4">
@@ -47,7 +42,6 @@ export default async function LandingPage() {
                 </section>
             )}
 
-            {/* Empty state when both fail */}
             {categories.length === 0 && products.length === 0 && (
                 <section className="py-16">
                     <PageContainer className="text-center">
