@@ -1,13 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ProductCard } from "@/lib/schemas/product";
+import { formatPrice } from "@/lib/format";
 
 interface ListingCardProps {
     product: ProductCard;
-}
-
-function formatPrice(amount: number): string {
-    return `KSh ${amount.toLocaleString("en-KE")}`;
 }
 
 export function ListingCard({ product }: ListingCardProps) {

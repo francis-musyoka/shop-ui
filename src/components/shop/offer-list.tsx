@@ -4,10 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ConditionBadge } from "./condition-badge";
 import { SellerCard } from "./seller-card";
 import { FEATURES } from "@/lib/features";
-
-function formatPrice(amount: number): string {
-    return `KSh ${amount.toLocaleString("en-KE")}`;
-}
+import { formatPrice } from "@/lib/format";
 
 export function OfferList({ offers }: { offers: Offer[] }) {
     if (offers.length === 0) {
