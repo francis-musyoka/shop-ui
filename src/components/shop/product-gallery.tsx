@@ -1,9 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useModalA11y } from "@/lib/use-modal-a11y";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    type CarouselApi,
+} from "@/components/ui/carousel";
 
 type ProductGalleryProps = {
     images: string[];
@@ -38,38 +44,92 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
     }, [count]);
 
     const [lightboxOpen, setLightboxOpen] = useState(false);
-    const lightboxRef = useModalA11y(lightboxOpen);
-    const showPrev = useCallback(() => setActive((a) => (a - 1 + count) % count), [count]);
-    const showNext = useCallback(() => setActive((a) => (a + 1) % count), [count]);
+    const [lightboxApi, setLightboxApi] = useState<CarouselApi>();
 
+    const [mobileApi, setMobileApi] = useState<CarouselApi>();
+    const [mobileActive, setMobileActive] = useState(0);
+
+    // Track the mobile carousel's position so the dots can reflect it.
     useEffect(() => {
-        if (!lightboxOpen) return;
+        if (!mobileApi) return;
+        const api = mobileApi;
+        const onSelect = () => setMobileActive(api.selectedScrollSnap());
+        onSelect();
+        api.on("select", onSelect);
+        return () => {
+            api.off("select", onSelect);
+        };
+    }, [mobileApi]);
+
+    // Carousel owns swipe/drag paging; mirror its position back to `active` so the
+    // inline gallery (main image + thumbnail highlight) reflects where the viewer landed.
+    useEffect(() => {
+        if (!lightboxApi) return;
+        const api = lightboxApi;
+        const onSelect = () => setActive(api.selectedScrollSnap());
+        api.on("select", onSelect);
+        return () => {
+            api.off("select", onSelect);
+        };
+    }, [lightboxApi]);
+
+    // Global ←/→ paging while the viewer is open (Dialog traps focus here).
+    useEffect(() => {
+        if (!lightboxOpen || !lightboxApi) return;
+        const api = lightboxApi;
         function onKey(e: KeyboardEvent) {
-            if (e.key === "Escape") setLightboxOpen(false);
-            else if (e.key === "ArrowLeft") showPrev();
-            else if (e.key === "ArrowRight") showNext();
+            if (e.key === "ArrowLeft") api.scrollPrev();
+            else if (e.key === "ArrowRight") api.scrollNext();
         }
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [lightboxOpen, showPrev, showNext]);
-
-    // Swipe: drag left → next, drag right → previous (touch devices).
-    const touchStartX = useRef<number | null>(null);
-    function onTouchStart(e: TouchEvent) {
-        touchStartX.current = e.touches[0]?.clientX ?? null;
-    }
-    function onTouchEnd(e: TouchEvent) {
-        const start = touchStartX.current;
-        touchStartX.current = null;
-        if (start == null) return;
-        const dx = (e.changedTouches[0]?.clientX ?? start) - start;
-        if (dx <= -40) showNext();
-        else if (dx >= 40) showPrev();
-    }
+    }, [lightboxOpen, lightboxApi]);
 
     return (
         <>
-            <div className="flex min-w-0 flex-1 gap-3">
+            {/* Mobile: full-width swipeable carousel (no rail, no lightbox) */}
+            <div className="md:hidden">
+                <Carousel
+                    opts={{ loop: false }}
+                    setApi={setMobileApi}
+                    aria-label={`${title} images`}
+                >
+                    <CarouselContent>
+                        {images.map((src, i) => (
+                            <CarouselItem key={i}>
+                                <div className="border-border relative aspect-square overflow-hidden rounded-sm border bg-white">
+                                    <Image
+                                        src={src}
+                                        alt={title}
+                                        fill
+                                        unoptimized
+                                        priority={i === 0}
+                                        sizes="100vw"
+                                        className="object-contain p-6"
+                                    />
+                                </div>
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                </Carousel>
+                {count > 1 && (
+                    <div
+                        data-testid="gallery-dots"
+                        className="mt-3 flex justify-center gap-1.5"
+                        aria-hidden
+                    >
+                        {images.map((_, i) => (
+                            <span
+                                key={i}
+                                className={`size-1.5 rounded-full transition-colors ${
+                                    i === mobileActive ? "bg-foreground" : "bg-muted-foreground/30"
+                                }`}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+            <div className="hidden min-w-0 flex-1 gap-3 md:flex">
                 <div className="relative w-16 shrink-0">
                     <div
                         ref={railRef}
@@ -139,16 +199,17 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
                 </button>
             </div>
 
-            {lightboxOpen && (
-                <div
-                    ref={lightboxRef}
-                    role="dialog"
-                    aria-modal="true"
+            <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+                <DialogContent
+                    showCloseButton={false}
                     aria-label={`${title} image viewer`}
-                    tabIndex={-1}
                     onClick={() => setLightboxOpen(false)}
-                    className="bg-foreground/90 fixed inset-0 z-50 flex items-center justify-center p-4 outline-none"
+                    /* fullscreen media viewer: fill the viewport, drop the card chrome */
+                    style={{ width: "100vw", height: "100vh", maxWidth: "none", borderRadius: 0 }}
+                    className="bg-foreground/90 flex items-center justify-center p-4"
                 >
+                    <DialogTitle className="sr-only">{`${title} image viewer`}</DialogTitle>
+
                     <button
                         type="button"
                         aria-label="Close image viewer"
@@ -158,13 +219,39 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
                         <X size={20} />
                     </button>
 
+                    <Carousel
+                        opts={{ loop: true, startIndex: active }}
+                        setApi={setLightboxApi}
+                        className="w-full"
+                    >
+                        <CarouselContent>
+                            {images.map((src, i) => (
+                                <CarouselItem key={i} className="flex items-center justify-center">
+                                    <div
+                                        className="relative h-[80vh] w-[85vw]"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <Image
+                                            src={src}
+                                            alt={title}
+                                            fill
+                                            unoptimized
+                                            sizes="85vw"
+                                            className="object-contain"
+                                        />
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                    </Carousel>
+
                     {count > 1 && (
                         <button
                             type="button"
                             aria-label="Previous image"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                showPrev();
+                                lightboxApi?.scrollPrev();
                             }}
                             className="text-background bg-foreground/40 hover:bg-foreground/60 absolute left-10 z-10 grid size-10 place-items-center rounded-full backdrop-blur-sm"
                         >
@@ -172,29 +259,13 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
                         </button>
                     )}
 
-                    <div
-                        className="relative h-[80vh] w-[85vw] touch-pan-y"
-                        onClick={(e) => e.stopPropagation()}
-                        onTouchStart={onTouchStart}
-                        onTouchEnd={onTouchEnd}
-                    >
-                        <Image
-                            src={current}
-                            alt={title}
-                            fill
-                            unoptimized
-                            sizes="85vw"
-                            className="object-contain"
-                        />
-                    </div>
-
                     {count > 1 && (
                         <button
                             type="button"
                             aria-label="Next image"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                showNext();
+                                lightboxApi?.scrollNext();
                             }}
                             className="text-background bg-foreground/40 hover:bg-foreground/60 absolute right-10 z-10 grid size-10 place-items-center rounded-full backdrop-blur-sm"
                         >
@@ -207,8 +278,8 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
                             {active + 1} / {count}
                         </span>
                     )}
-                </div>
-            )}
+                </DialogContent>
+            </Dialog>
         </>
     );
 }
