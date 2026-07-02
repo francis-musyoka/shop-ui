@@ -1,11 +1,9 @@
-// src/app/products/[slug]/page.tsx
+// src/app/(shop)/products/[slug]/page.tsx
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { getProductBySlug } from "@/lib/api/products";
 import { ApiError } from "@/lib/api/errors";
-import { SiteHeader } from "@/components/layout/site-header";
-import { Footer } from "@/components/layout/footer";
 import { SpecsTable } from "@/components/shop/specs-table";
 import { Expandable } from "@/components/ui/expandable";
 import { ProductPageClient } from "./product-page-client";
@@ -23,8 +21,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
     return (
         <>
-            <SiteHeader />
-
             <div className="mx-auto max-w-7xl px-4 md:px-6">
                 <nav className="text-muted-foreground flex items-center gap-1 py-3 text-sm">
                     <Link href="/" className="hover:text-foreground">
@@ -80,8 +76,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     <p className="text-muted-foreground mt-3 text-sm">Coming soon</p>
                 </section>
             </div>
-
-            <Footer />
         </>
     );
 }

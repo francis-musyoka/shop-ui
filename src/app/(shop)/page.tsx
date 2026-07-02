@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { getTopLevelCategories } from "@/lib/api/categories";
 import { getNewestListings } from "@/lib/api/products";
-import { SiteHeader } from "@/components/layout/site-header";
-import { Footer } from "@/components/layout/footer";
 import { PageContainer } from "@/components/layout/page-container";
 import { ListingCard } from "@/components/shop/listing-card";
 
@@ -17,7 +15,6 @@ export default async function LandingPage() {
 
     return (
         <>
-            <SiteHeader />
             {products.length > 0 && (
                 <section className="px-4 py-5 md:px-6">
                     <div className="mb-3 flex items-start justify-between gap-4">
@@ -55,8 +52,6 @@ export default async function LandingPage() {
                     </PageContainer>
                 </section>
             )}
-
-            <Footer />
         </>
     );
 }
