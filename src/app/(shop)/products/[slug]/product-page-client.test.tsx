@@ -84,10 +84,12 @@ describe("ProductPageClient", () => {
         expect(screen.getByText("Coming soon")).toBeInTheDocument();
     });
 
-    it("shows the winning offer's shop (linked) and the product condition", () => {
+    it("shows the winning offer's shop name and the product condition", () => {
         render(<ProductPageClient product={product} />);
-        const shopLink = screen.getByRole("link", { name: "Shop Two" });
-        expect(shopLink).toHaveAttribute("href", "/shops/shop-two");
+        // Shop profile page (/shops/[slug]) is not built yet, so the name renders
+        // as plain text rather than a link — see the commented-out Link in the component.
+        expect(screen.getByText("Shop Two")).toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: "Shop Two" })).not.toBeInTheDocument();
         expect(screen.getByText(/Status:\s*New/)).toBeInTheDocument();
     });
 
