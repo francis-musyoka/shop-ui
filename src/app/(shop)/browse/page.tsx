@@ -24,8 +24,16 @@ export default async function BrowsePage({
 
     const [res, tree, brands] = await Promise.all([
         searchProducts(params),
-        getCategoryTree().catch(() => []),
-        listBrands().catch(() => []),
+        // Facets are non-critical — degrade to an empty facet list on failure, but
+        // log it (incl. schema drift) instead of swallowing silently.
+        getCategoryTree().catch((error) => {
+            console.error("BrowsePage: failed to load category tree", error);
+            return [];
+        }),
+        listBrands().catch((error) => {
+            console.error("BrowsePage: failed to load brands", error);
+            return [];
+        }),
     ]);
 
     // Filter panel keeps a flat top-level list; derive it from the tree roots so

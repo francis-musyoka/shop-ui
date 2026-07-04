@@ -6,7 +6,15 @@ import { getSession } from "@/lib/auth/session";
 import { getCategoryTree } from "@/lib/api/categories";
 
 export async function SiteHeader() {
-    const [session, tree] = await Promise.all([getSession(), getCategoryTree().catch(() => [])]);
+    const [session, tree] = await Promise.all([
+        getSession(),
+        getCategoryTree().catch((error) => {
+            // Category bar is non-critical chrome — degrade to no bar, but keep the
+            // failure (incl. schema drift) visible in server logs rather than silent.
+            console.error("SiteHeader: failed to load category tree", error);
+            return [];
+        }),
+    ]);
     const user = session?.user ?? null;
     const topLevel = tree.map(({ id, name, slug }) => ({ id, name, slug }));
 

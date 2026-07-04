@@ -7,6 +7,14 @@ import { ApiError, parseBackendError } from "./errors";
 
 export type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
+/**
+ * Revalidation window (seconds) for rarely-changing reference data
+ * (categories, brands). Bounds staleness so tagged, cached data can't go stale
+ * until redeploy. When the backend gains a mutation hook, a `revalidateTag`
+ * webhook can replace this for near-real-time freshness.
+ */
+export const STATIC_DATA_REVALIDATE = 60 * 60; // 1 hour
+
 export interface ApiRequest<TSchema extends z.ZodTypeAny> {
     /** Path relative to BACKEND_API_URL, e.g. "/api/customers/signin". */
     path: string;
@@ -25,6 +33,13 @@ export interface ApiRequest<TSchema extends z.ZodTypeAny> {
     cache?: RequestCache;
     /** Next cache tags for revalidation. */
     tags?: string[];
+    /**
+     * Time-based revalidation window in seconds (Next `next.revalidate`). When
+     * set, the response is cached and refreshed at most this often. Mutually
+     * exclusive with `cache` (Next rejects both) — when provided, `cache` is
+     * omitted.
+     */
+    revalidate?: number;
 }
 
 const REFRESH_PATH = "/api/customers/refresh-token";
@@ -73,12 +88,17 @@ async function sendOnce<TSchema extends z.ZodTypeAny>(
 
     let response: Response;
     try {
+        const next: { tags?: string[]; revalidate?: number } = {};
+        if (req.tags) next.tags = req.tags;
+        if (req.revalidate !== undefined) next.revalidate = req.revalidate;
         response = await fetch(url, {
             method: req.method ?? "GET",
             headers,
             body,
-            cache: req.cache ?? "no-store",
-            ...(req.tags ? { next: { tags: req.tags } } : {}),
+            // `cache` and `next.revalidate` are mutually exclusive in Next — when a
+            // revalidate window is set, it governs caching, so `cache` is omitted.
+            ...(req.revalidate === undefined ? { cache: req.cache ?? "no-store" } : {}),
+            ...(Object.keys(next).length > 0 ? { next } : {}),
         });
     } catch {
         return {
