@@ -15,29 +15,53 @@ const product: ProductDetail = {
     category: { id: "c1", name: "Phones", slug: "phones" },
     brand: { id: "b1", name: "Samsung", slug: "samsung" },
     images: [{ id: "i1", url: "https://x/1.jpg", order: 0 }],
+    buyBoxVariantId: "v2",
     variants: [
         {
             id: "v1",
             attributes: { Storage: "128GB" },
             colorHex: null,
             images: [],
-            offers: [
-                {
-                    id: "o1",
-                    price: 12000,
-                    discount: 1800,
-                    quantityTotal: 7,
-                    quantityAvailable: 7,
-                    condition: "NEW",
-                    status: "ACTIVE",
-                    deliveryDays: 2,
-                    warrantyMonths: 12,
-                    isFeatured: true,
-                    location: "Nairobi",
-                    finalPrice: 10200,
-                    shop: { id: "s1", name: "Shop One", slug: "shop-one", rating: 4.6 },
-                },
-            ],
+            offerCount: 2,
+            buyBox: {
+                id: "o1",
+                condition: "NEW",
+                finalPrice: 10200,
+                originalPrice: 12000,
+                discountPercent: 15,
+                quantityAvailable: 7,
+                deliveryDays: 2,
+                warrantyMonths: 12,
+                location: "Nairobi",
+                shop: { id: "s1", name: "Shop One", slug: "shop-one", rating: 4.6 },
+                quantityTotal: 7,
+                quantityReserved: 0,
+                isFeatured: true,
+                createdAt: "2026-01-01T00:00:00Z",
+            },
+        },
+        {
+            id: "v2",
+            attributes: { Storage: "256GB" },
+            colorHex: null,
+            images: [],
+            offerCount: 3,
+            buyBox: {
+                id: "o2",
+                condition: "NEW",
+                finalPrice: 15500,
+                originalPrice: 18000,
+                discountPercent: 14,
+                quantityAvailable: 5,
+                deliveryDays: 2,
+                warrantyMonths: 12,
+                location: "Nairobi",
+                shop: { id: "s2", name: "Shop Two", slug: "shop-two", rating: 4.8 },
+                quantityTotal: 5,
+                quantityReserved: 0,
+                isFeatured: true,
+                createdAt: "2026-01-01T00:00:00Z",
+            },
         },
     ],
 };
@@ -51,8 +75,8 @@ describe("ProductPageClient", () => {
 
     it("renders the derived buy-box price and strike-through original", () => {
         render(<ProductPageClient product={product} />);
-        expect(screen.getByText("KSh 10,200")).toBeInTheDocument();
-        expect(screen.getByText("KSh 12,000")).toBeInTheDocument();
+        expect(screen.getByText("KSh 15,500")).toBeInTheDocument();
+        expect(screen.getByText("KSh 18,000")).toBeInTheDocument();
     });
 
     it("shows the About-this-item placeholder", () => {
@@ -62,8 +86,21 @@ describe("ProductPageClient", () => {
 
     it("shows the winning offer's shop (linked) and the product condition", () => {
         render(<ProductPageClient product={product} />);
-        const shopLink = screen.getByRole("link", { name: "Shop One" });
-        expect(shopLink).toHaveAttribute("href", "/shops/shop-one");
+        const shopLink = screen.getByRole("link", { name: "Shop Two" });
+        expect(shopLink).toHaveAttribute("href", "/shops/shop-two");
         expect(screen.getByText(/Status:\s*New/)).toBeInTheDocument();
+    });
+
+    it("shows the seller count from offerCount", () => {
+        render(<ProductPageClient product={product} />);
+        expect(screen.getByText(/3 sellers offering this product/)).toBeInTheDocument();
+    });
+
+    it("opens on the buy-box variant so the price matches the card", () => {
+        render(<ProductPageClient product={product} />);
+        // buyBoxVariantId points to v2 (not variants[0]); must show v2's price, not v1's
+        expect(screen.getByText("KSh 15,500")).toBeInTheDocument();
+        // Ensure v1's price is NOT shown (regression check)
+        expect(screen.queryByText("KSh 10,200")).not.toBeInTheDocument();
     });
 });

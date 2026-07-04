@@ -11,14 +11,17 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { ProductGallery } from "@/components/shop/product-gallery";
 import { VariantSelector } from "@/components/shop/variant-selector";
 import { ConditionBadge } from "@/components/shop/condition-badge";
-import { OfferList } from "@/components/shop/offer-list";
+import { OffersPanel } from "@/components/shop/offers-panel";
 import { deriveBuybox, findVariant, galleryImageUrls } from "@/lib/product-detail";
 import { FEATURES } from "@/lib/features";
 import { formatPrice } from "@/lib/format";
 
 export function ProductPageClient({ product }: { product: ProductDetail }) {
+    const initialVariant =
+        product.variants.find((v) => v.id === product.buyBoxVariantId) ?? product.variants[0];
+
     const [selectedAttrs, setSelectedAttrs] = useState<Record<string, string>>(
-        () => product.variants[0]?.attributes ?? {},
+        () => initialVariant?.attributes ?? {},
     );
 
     const variant = useMemo(
@@ -27,7 +30,7 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
     );
     const buybox = useMemo(() => deriveBuybox(variant), [variant]);
     const images = useMemo(() => galleryImageUrls(product, variant), [product, variant]);
-    const offers = variant?.offers ?? [];
+    const offerCount = variant?.offerCount ?? 0;
 
     const [offersOpen, setOffersOpen] = useState(false);
 
@@ -157,7 +160,7 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
 
                 {/* Available offers */}
                 <aside className="md:col-span-3">
-                    {offers.length > 0 && (
+                    {offerCount > 0 && (
                         <div className="border-border bg-card rounded-sm border">
                             <h2 className="border-border border-b px-4 py-3 text-sm font-semibold">
                                 Available offers
@@ -168,8 +171,8 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                                 className="text-foreground hover:bg-muted flex w-full items-center justify-between gap-2 px-4 py-3 text-left text-sm transition-colors duration-100"
                             >
                                 <span>
-                                    {offers.length} {offers.length === 1 ? "seller" : "sellers"}{" "}
-                                    offering this product
+                                    {offerCount} {offerCount === 1 ? "seller" : "sellers"} offering
+                                    this product
                                 </span>
                                 <ChevronRight
                                     size={16}
@@ -191,7 +194,11 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                         <SheetTitle>Available offers</SheetTitle>
                     </SheetHeader>
                     <div className="flex-1 overflow-y-auto px-4 py-2">
-                        <OfferList offers={offers} />
+                        <OffersPanel
+                            slug={product.slug}
+                            variantId={variant?.id}
+                            open={offersOpen}
+                        />
                     </div>
                 </SheetContent>
             </Sheet>
