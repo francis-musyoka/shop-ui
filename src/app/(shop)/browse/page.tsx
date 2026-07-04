@@ -1,5 +1,5 @@
 import { searchProducts } from "@/lib/api/products";
-import { getTopLevelCategories } from "@/lib/api/categories";
+import { getCategoryTree } from "@/lib/api/categories";
 import { listBrands } from "@/lib/api/brands";
 import {
     parseBrowseParams,
@@ -22,11 +22,16 @@ export default async function BrowsePage({
     const filters = parseBrowseParams(await searchParams);
     const params = toSearchProductsParams(filters);
 
-    const [res, categories, brands] = await Promise.all([
+    const [res, tree, brands] = await Promise.all([
         searchProducts(params),
-        getTopLevelCategories().catch(() => []),
+        getCategoryTree().catch(() => []),
         listBrands().catch(() => []),
     ]);
+
+    // Filter panel keeps a flat top-level list; derive it from the tree roots so
+    // its category IDs match the (freshly-fetched) tree the header uses, instead
+    // of the separately-cached flat endpoint that can go stale after a reseed.
+    const categories = tree.map(({ id, name }) => ({ id, name }));
 
     const products = res.data;
     const total = res.pagination.total;
