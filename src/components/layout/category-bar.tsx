@@ -2,21 +2,21 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronRight } from "lucide-react";
-import type { Category } from "@/lib/schemas/category";
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
+import type { CategoryTreeNode } from "@/lib/schemas/category";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { CategoryDrilldown } from "./category-drilldown";
 
 interface CategoryBarProps {
-    categories: Category[];
+    tree: CategoryTreeNode[];
 }
 
 /** Max categories to show in the horizontal bar */
 const MAX_VISIBLE = 8;
 
-export function CategoryBar({ categories }: CategoryBarProps) {
+export function CategoryBar({ tree }: CategoryBarProps) {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const visible = categories.slice(0, MAX_VISIBLE);
-
+    const visible = tree.slice(0, MAX_VISIBLE);
     const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
     return (
@@ -58,41 +58,8 @@ export function CategoryBar({ categories }: CategoryBarProps) {
                     style={{ width: "18rem" }}
                     className="gap-0 p-0"
                 >
-                    <SheetHeader className="bg-brand-800 dark:bg-brand-900 flex-row items-center justify-between px-4 py-3">
-                        <SheetTitle className="text-base font-semibold text-white">
-                            All Categories
-                        </SheetTitle>
-                        <SheetClose
-                            className="rounded-sm p-1 text-white/70 hover:text-white"
-                            aria-label="Close menu"
-                        >
-                            <X className="size-5" />
-                        </SheetClose>
-                    </SheetHeader>
-
-                    <div className="flex-1 overflow-y-auto py-2">
-                        {categories.map((cat) => (
-                            <Link
-                                key={cat.id}
-                                href={`/browse?categoryId=${cat.id}`}
-                                onClick={closeDrawer}
-                                className="text-foreground hover:bg-muted flex items-center justify-between px-4 py-2.5 text-sm transition-colors"
-                            >
-                                {cat.name}
-                                <ChevronRight className="text-muted-foreground size-4" />
-                            </Link>
-                        ))}
-                    </div>
-
-                    <div className="border-border border-t px-4 py-3">
-                        <Link
-                            href="/deals"
-                            onClick={closeDrawer}
-                            className="text-accent-foreground text-sm font-medium"
-                        >
-                            🔥 Today&apos;s Deals
-                        </Link>
-                    </div>
+                    <SheetTitle className="sr-only">All Categories</SheetTitle>
+                    <CategoryDrilldown tree={tree} onNavigate={closeDrawer} />
                 </SheetContent>
             </Sheet>
         </>

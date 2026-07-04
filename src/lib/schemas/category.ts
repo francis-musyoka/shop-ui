@@ -17,7 +17,7 @@ export interface CategoryTreeNode {
     id: string;
     name: string;
     slug: string;
-    children: CategoryTreeNode[];
+    children?: CategoryTreeNode[];
 }
 
 export const CategoryTreeNodeSchema: z.ZodType<CategoryTreeNode> = z.lazy(() =>
@@ -25,7 +25,7 @@ export const CategoryTreeNodeSchema: z.ZodType<CategoryTreeNode> = z.lazy(() =>
         id: CUID,
         name: z.string(),
         slug: z.string(),
-        children: z.array(CategoryTreeNodeSchema),
+        children: z.array(CategoryTreeNodeSchema).optional(),
     }),
 );
 

@@ -3,14 +3,12 @@ import { Navbar } from "@/components/layout/navbar";
 import { SearchBar } from "@/components/layout/search-bar";
 import { CategoryBar } from "@/components/layout/category-bar";
 import { getSession } from "@/lib/auth/session";
-import { getTopLevelCategories } from "@/lib/api/categories";
+import { getCategoryTree } from "@/lib/api/categories";
 
 export async function SiteHeader() {
-    const [session, categories] = await Promise.all([
-        getSession(),
-        getTopLevelCategories().catch(() => []),
-    ]);
+    const [session, tree] = await Promise.all([getSession(), getCategoryTree().catch(() => [])]);
     const user = session?.user ?? null;
+    const topLevel = tree.map(({ id, name, slug }) => ({ id, name, slug }));
 
     return (
         <>
@@ -26,7 +24,7 @@ export async function SiteHeader() {
                         <SearchBar
                             placeholder="Search products, brands, and categories"
                             className="w-full"
-                            categories={categories}
+                            categories={topLevel}
                         />
                     </div>
                     <Navbar user={user} />
@@ -39,7 +37,7 @@ export async function SiteHeader() {
             </div>
 
             {/* Category bar */}
-            {categories.length > 0 && <CategoryBar categories={categories} />}
+            {tree.length > 0 && <CategoryBar tree={tree} />}
         </>
     );
 }
