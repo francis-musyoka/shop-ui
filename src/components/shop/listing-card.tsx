@@ -43,7 +43,7 @@ export function ListingCard({ product }: ListingCardProps) {
             {/* Content */}
             <div className="bg-background border-border flex flex-1 flex-col gap-1 border-t px-2.5 py-2.5">
                 {/* Title */}
-                <h3 className="text-foreground line-clamp-4 text-base leading-snug font-medium">
+                <h3 className="text-foreground line-clamp-4 text-sm leading-snug font-medium hover:underline">
                     {product.title}
                 </h3>
 
@@ -52,10 +52,10 @@ export function ListingCard({ product }: ListingCardProps) {
                     {hasMultipleVariants && (
                         <span className="text-muted-foreground text-xs">From</span>
                     )}
-                    <span className="text-brand-800 dark:text-gold-300 font-mono text-lg font-semibold">
-                        {formatPrice(buybox.price)}
+                    <span className="text-brand-800 dark:text-gold-300 font-mono text-base font-semibold">
+                        {formatPrice(buybox.finalPrice)}
                     </span>
-                    {buybox.originalPrice != null && buybox.originalPrice > buybox.price && (
+                    {buybox.originalPrice != null && buybox.originalPrice > buybox.finalPrice && (
                         <span className="text-muted-foreground font-mono text-sm line-through">
                             {formatPrice(buybox.originalPrice)}
                         </span>
@@ -64,7 +64,7 @@ export function ListingCard({ product }: ListingCardProps) {
 
                 {/* Low-stock nudge */}
                 {isLowStock && (
-                    <p className="text-gold-500 dark:text-gold-300 text-sm font-semibold">
+                    <p className="text-gold-500 dark:text-gold-300 text-xs font-semibold">
                         Only {buybox.stock} left in stock — order soon
                     </p>
                 )}

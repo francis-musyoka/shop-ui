@@ -1,7 +1,7 @@
 import Link from "next/link";
-import type { Offer } from "@/lib/schemas/product";
+import type { OfferSummary } from "@/lib/schemas/product";
 
-export function SellerCard({ shop }: { shop: Offer["shop"] }) {
+export function SellerCard({ shop }: { shop: OfferSummary["shop"] }) {
     return (
         <div className="flex items-center gap-2">
             <div className="bg-brand-100 text-brand-800 flex size-6 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
