@@ -8,12 +8,13 @@ export function SellerCard({ shop }: { shop: OfferSummary["shop"] }) {
                 {shop.name.charAt(0)}
             </div>
             <div className="min-w-0">
-                <Link
+                {/* <Link
                     href={`/shops/${shop.slug}`}
                     className="truncate text-sm font-medium hover:underline"
                 >
                     {shop.name}
-                </Link>
+                </Link> */}
+                <span className="truncate text-sm font-medium">{shop.name}</span>
             </div>
         </div>
     );

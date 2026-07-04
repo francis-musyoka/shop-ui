@@ -89,6 +89,7 @@ export function CategoryDrilldown({ tree, onNavigate }: CategoryDrilldownProps) 
                 )}
             </div>
 
+            {/* /deals route not built yet — commented until built (do not delete):
             {!current && (
                 <div className="border-border border-t px-4 py-3">
                     <Link
@@ -100,6 +101,7 @@ export function CategoryDrilldown({ tree, onNavigate }: CategoryDrilldownProps) 
                     </Link>
                 </div>
             )}
+            */}
         </div>
     );
 }

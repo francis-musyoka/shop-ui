@@ -22,9 +22,9 @@ export function OfferList({ offers }: { offers: OfferSummary[] }) {
                         <SellerCard shop={offer.shop} />
                         <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
                             <ConditionBadge condition={offer.condition} />
-                            {offer.deliveryDays != null && (
+                            {/* {offer.deliveryDays != null && (
                                 <span>Delivery ~{offer.deliveryDays} days</span>
-                            )}
+                            )} */}
                         </div>
                     </div>
                     <div className="flex items-center gap-3">

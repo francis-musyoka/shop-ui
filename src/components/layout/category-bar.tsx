@@ -42,12 +42,14 @@ export function CategoryBar({ tree }: CategoryBarProps) {
                         </Link>
                     ))}
 
+                    {/* /deals route not built yet — commented until built (do not delete):
                     <Link
                         href="/deals"
                         className="text-accent shrink-0 rounded-sm px-2.5 py-1 text-sm font-medium hover:bg-white/10"
                     >
                         Today&apos;s Deals
                     </Link>
+                    */}
                 </div>
             </nav>
 

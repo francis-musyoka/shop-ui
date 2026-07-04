@@ -44,7 +44,7 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                 <div className="md:col-span-4">
                     <div className="flex items-center justify-between">
                         <Link
-                            href={`/brands/${product.brand.slug}`}
+                            href={`/browse?brandId=${product.brand.id}`}
                             className="text-brand-600 dark:text-brand-400 text-sm font-medium hover:underline"
                         >
                             {product.brand.name} &rsaquo;
@@ -101,12 +101,15 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                             <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
                                 <span className="text-muted-foreground">
                                     Sold by: {"  "}
-                                    <Link
+                                    {/* <Link
                                         href={`/shops/${buybox.offer.shop.slug}`}
                                         className="text-brand-600 dark:text-brand-400 font-medium hover:underline"
                                     >
                                         {buybox.offer.shop.name}
-                                    </Link>
+                                    </Link> */}
+                                    <span className="text-brand-600 dark:text-brand-400 font-medium">
+                                        {buybox.offer.shop.name}
+                                    </span>
                                 </span>
                                 <ConditionBadge condition={buybox.condition} />
                             </div>
