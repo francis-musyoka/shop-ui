@@ -7,7 +7,7 @@ import { ListingCard } from "@/components/shop/listing-card";
 export default async function LandingPage() {
     const [categoriesResult, productsResult] = await Promise.allSettled([
         getTopLevelCategories(),
-        getNewestListings({ limit: 12, perCategory: 3 }),
+        getNewestListings({ limit: 18, perCategory: 3 }),
     ]);
 
     const categories = categoriesResult.status === "fulfilled" ? categoriesResult.value : [];
