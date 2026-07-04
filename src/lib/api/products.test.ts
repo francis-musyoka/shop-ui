@@ -15,7 +15,7 @@ vi.mock("@/lib/auth/cookie-store", () => ({
 }));
 
 import productFixtures from "../../../tests/fixtures/backend/products.json";
-import { searchProducts, getNewestListings, getProductBySlug } from "./products";
+import { searchProducts, getNewestListings, getProductBySlug, getVariantOffers } from "./products";
 
 beforeEach(() => {
     vi.restoreAllMocks();
@@ -52,6 +52,22 @@ describe("searchProducts", () => {
         const result = await searchProducts({ search: "nonexistent" });
         expect(result.data).toHaveLength(0);
     });
+
+    it("serializes array filters as CSV and passes sort through", async () => {
+        mockFetchResponse(productFixtures.searchSuccess);
+        await searchProducts({
+            categoryId: ["cat1id0000000000000000001", "cat2id0000000000000000002"],
+            brandId: ["brand1id00000000000000001"],
+            condition: ["NEW", "USED"],
+            sort: "price_asc",
+        });
+        const url = (globalThis.fetch as Mock).mock.calls[0]![0] as string;
+        const decoded = decodeURIComponent(url);
+        expect(decoded).toContain("categoryId=cat1id0000000000000000001,cat2id0000000000000000002");
+        expect(decoded).toContain("condition=NEW,USED");
+        expect(decoded).toContain("brandId=brand1id00000000000000001");
+        expect(decoded).toContain("sort=price_asc");
+    });
 });
 
 describe("getNewestListings", () => {
@@ -87,5 +103,28 @@ describe("getProductBySlug", () => {
         const fetchCall = (globalThis.fetch as Mock).mock.calls[0]!;
         const url = fetchCall[0] as string;
         expect(url).toContain("/api/products/samsung-galaxy-s24-ultra");
+    });
+});
+
+describe("getVariantOffers", () => {
+    it("returns the parsed offers page", async () => {
+        mockFetchResponse(productFixtures.variantOffersSuccess);
+        const res = await getVariantOffers("phone", { variantId: "var1aaaaaaaaaaaaaaaaaaaaa" });
+        expect(res.data).toHaveLength(1);
+        expect(res.pagination.hasNextPage).toBe(false);
+    });
+
+    it("sends slug, variantId, page and limit on the URL", async () => {
+        mockFetchResponse(productFixtures.variantOffersSuccess);
+        await getVariantOffers("phone", {
+            variantId: "var1aaaaaaaaaaaaaaaaaaaaa",
+            page: 2,
+            limit: 20,
+        });
+        const url = (globalThis.fetch as Mock).mock.calls[0]![0] as string;
+        expect(url).toContain("/api/products/phone/offers");
+        expect(url).toContain("variantId=var1aaaaaaaaaaaaaaaaaaaaa");
+        expect(url).toContain("page=2");
+        expect(url).toContain("limit=20");
     });
 });

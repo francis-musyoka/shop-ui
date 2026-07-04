@@ -9,6 +9,8 @@ import {
     NewestListingsResponseSchema,
     type ProductDetail,
     ProductDetailResponseSchema,
+    type VariantOffersResponse,
+    VariantOffersResponseSchema,
 } from "@/lib/schemas/product";
 
 /**
@@ -18,10 +20,15 @@ import {
 export async function searchProducts(
     params: SearchProductsParams = {},
 ): Promise<SearchProductsResponse> {
+    const query: Record<string, string | number | boolean | undefined> = {};
+    for (const [key, value] of Object.entries(params)) {
+        if (value === undefined || value === null) continue;
+        query[key] = Array.isArray(value) ? value.join(",") : value;
+    }
     return apiFetch({
         path: "/api/products",
         schema: SearchProductsResponseSchema,
-        query: params as Record<string, string | number | boolean | undefined>,
+        query,
         forwardCookies: false,
         cache: "no-store",
     });
@@ -55,4 +62,22 @@ export async function getProductBySlug(slug: string): Promise<ProductDetail> {
         cache: "no-store",
     });
     return res.product;
+}
+
+/**
+ * Full offer list for one variant ("compare offers from other sellers"),
+ * winner-first and paginated. Called lazily via the Route Handler when the
+ * user opens the compare drawer — NOT part of the slug-only detail fetch.
+ */
+export async function getVariantOffers(
+    slug: string,
+    { variantId, page = 1, limit = 20 }: { variantId: string; page?: number; limit?: number },
+): Promise<VariantOffersResponse> {
+    return apiFetch({
+        path: `/api/products/${slug}/offers`,
+        schema: VariantOffersResponseSchema,
+        query: { variantId, page, limit },
+        forwardCookies: false,
+        cache: "no-store",
+    });
 }
