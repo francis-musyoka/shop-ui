@@ -10,16 +10,14 @@ describe("Footer", () => {
         expect(headings.length).toBeGreaterThanOrEqual(1);
     });
 
-    it("renders Browse All and Categories links", () => {
+    it("renders the Browse All link", () => {
         render(<Footer />);
         expect(screen.getByRole("link", { name: /browse all/i })).toHaveAttribute(
             "href",
             "/browse",
         );
-        expect(screen.getByRole("link", { name: /categories/i })).toHaveAttribute(
-            "href",
-            "/categories",
-        );
+        // Categories link is commented out until /categories exists.
+        expect(screen.queryByRole("link", { name: /categories/i })).not.toBeInTheDocument();
     });
 
     it("renders Sign In and Create Account links", () => {

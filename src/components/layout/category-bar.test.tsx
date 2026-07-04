@@ -21,9 +21,7 @@ describe("CategoryBar", () => {
         );
         expect(screen.getByRole("link", { name: "Category 7" })).toBeInTheDocument();
         expect(screen.queryByRole("link", { name: "Category 8" })).not.toBeInTheDocument();
-        expect(screen.getByRole("link", { name: /today's deals/i })).toHaveAttribute(
-            "href",
-            "/deals",
-        );
+        // "Today's Deals" link is commented out until /deals exists.
+        expect(screen.queryByRole("link", { name: /today's deals/i })).not.toBeInTheDocument();
     });
 });
