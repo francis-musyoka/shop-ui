@@ -10,7 +10,7 @@
                 "variantCount": 3,
                 "offerCount": 5,
                 "buybox": {
-                    "price": 145000,
+                    "finalPrice": 145000,
                     "originalPrice": 160000,
                     "discountPercent": 9.375,
                     "condition": "NEW",
@@ -25,7 +25,7 @@
                 "variantCount": 2,
                 "offerCount": 3,
                 "buybox": {
-                    "price": 199000,
+                    "finalPrice": 199000,
                     "originalPrice": null,
                     "discountPercent": null,
                     "condition": "NEW",
@@ -63,7 +63,7 @@
                 "variantCount": 3,
                 "offerCount": 5,
                 "buybox": {
-                    "price": 145000,
+                    "finalPrice": 145000,
                     "originalPrice": 160000,
                     "discountPercent": 9.375,
                     "condition": "NEW",
@@ -78,7 +78,7 @@
                 "variantCount": 1,
                 "offerCount": 2,
                 "buybox": {
-                    "price": 42000,
+                    "finalPrice": 42000,
                     "originalPrice": null,
                     "discountPercent": null,
                     "condition": "USED",
@@ -123,6 +123,7 @@
                     "order": 1
                 }
             ],
+            "buyBoxVariantId": "cl9ebqhxk00030var00000001",
             "variants": [
                 {
                     "id": "cl9ebqhxk00030var00000001",
@@ -135,50 +136,53 @@
                             "order": 0
                         }
                     ],
-                    "offers": [
-                        {
-                            "id": "cl9ebqhxk00060off00000001",
-                            "price": "150000",
-                            "discount": "5",
-                            "quantityTotal": 10,
-                            "quantityAvailable": 7,
-                            "condition": "NEW",
-                            "deliveryDays": 3,
-                            "warrantyMonths": 12,
-                            "isFeatured": false,
-                            "isBuyBoxWinner": true,
-                            "location": "Nairobi",
-                            "finalPrice": 142500,
-                            "shop": {
-                                "id": "cl9ebqhxk00070shp00000001",
-                                "name": "TechHub Kenya",
-                                "slug": "techhub-kenya",
-                                "rating": "4.5"
-                            }
-                        },
-                        {
-                            "id": "cl9ebqhxk00060off00000002",
-                            "price": "145000",
-                            "discount": "0",
-                            "quantityTotal": 3,
-                            "quantityAvailable": 3,
-                            "condition": "NEW",
-                            "deliveryDays": 5,
-                            "warrantyMonths": 24,
-                            "isFeatured": true,
-                            "isBuyBoxWinner": false,
-                            "location": "Mombasa",
-                            "finalPrice": 145000,
-                            "shop": {
-                                "id": "cl9ebqhxk00070shp00000002",
-                                "name": "Gadget World",
-                                "slug": "gadget-world",
-                                "rating": "4.2"
-                            }
+                    "offerCount": 2,
+                    "buyBox": {
+                        "id": "cl9ebqhxk00060off00000001",
+                        "condition": "NEW",
+                        "finalPrice": 142500,
+                        "originalPrice": 150000,
+                        "discountPercent": 5,
+                        "quantityTotal": 10,
+                        "quantityReserved": 3,
+                        "quantityAvailable": 7,
+                        "deliveryDays": 3,
+                        "warrantyMonths": 12,
+                        "isFeatured": false,
+                        "location": "Nairobi",
+                        "createdAt": "2025-01-16T09:00:00.000Z",
+                        "shop": {
+                            "id": "cl9ebqhxk00070shp00000001",
+                            "name": "TechHub Kenya",
+                            "slug": "techhub-kenya",
+                            "rating": 4.5
                         }
-                    ]
+                    }
                 }
             ]
         }
+    },
+    "variantOffersSuccess": {
+        "success": true,
+        "data": [
+            {
+                "id": "off9aaaaaaaaaaaaaaaaaaaaa",
+                "condition": "NEW",
+                "finalPrice": 12500,
+                "originalPrice": 25000,
+                "discountPercent": 50,
+                "quantityAvailable": 5,
+                "deliveryDays": 3,
+                "warrantyMonths": 12,
+                "location": "Nairobi",
+                "shop": {
+                    "id": "shop1aaaaaaaaaaaaaaaaaaaa",
+                    "name": "Shop One",
+                    "slug": "shop-one",
+                    "rating": 4.6
+                }
+            }
+        ],
+        "pagination": { "total": 1, "page": 1, "limit": 20, "totalPages": 1, "hasNextPage": false }
     }
 }
