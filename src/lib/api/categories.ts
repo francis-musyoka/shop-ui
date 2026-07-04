@@ -1,5 +1,5 @@
 import "server-only";
-import { apiFetch } from "./client";
+import { apiFetch, STATIC_DATA_REVALIDATE } from "./client";
 import type {
     Category,
     CategoryTreeNode,
@@ -21,7 +21,7 @@ export async function getCategoryTree(): Promise<CategoryTreeNode[]> {
         path: "/api/categories/tree",
         schema: CategoryTreeResponseSchema,
         forwardCookies: false,
-        cache: "force-cache",
+        revalidate: STATIC_DATA_REVALIDATE,
         tags: ["categories"],
     });
     return res.categories;
@@ -35,7 +35,7 @@ export async function getTopLevelCategories(): Promise<Category[]> {
         path: "/api/categories",
         schema: TopLevelCategoriesResponseSchema,
         forwardCookies: false,
-        cache: "force-cache",
+        revalidate: STATIC_DATA_REVALIDATE,
         tags: ["categories"],
     });
     return res.categories;
@@ -49,7 +49,7 @@ export async function getCategoryBySlug(slug: string): Promise<CategoryBySlug> {
         path: `/api/categories/${slug}`,
         schema: CategoryBySlugResponseSchema,
         forwardCookies: false,
-        cache: "force-cache",
+        revalidate: STATIC_DATA_REVALIDATE,
         tags: ["categories"],
     });
     return res.category;
@@ -63,7 +63,7 @@ export async function getCategoryBreadcrumb(slug: string): Promise<BreadcrumbIte
         path: `/api/categories/${slug}/breadcrumb`,
         schema: CategoryBreadcrumbResponseSchema,
         forwardCookies: false,
-        cache: "force-cache",
+        revalidate: STATIC_DATA_REVALIDATE,
         tags: ["categories"],
     });
     return res.breadcrumb;

@@ -10,14 +10,16 @@ const variants: DetailVariant[] = [
         attributes: { Storage: "128GB", Color: "Black" },
         colorHex: "#111",
         images: [],
-        offers: [],
+        offerCount: 0,
+        buyBox: null,
     },
     {
         id: "b",
         attributes: { Storage: "256GB", Color: "Black" },
         colorHex: "#111",
         images: [],
-        offers: [],
+        offerCount: 0,
+        buyBox: null,
     },
 ];
 

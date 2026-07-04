@@ -1,4 +1,4 @@
-import type { ProductDetail, Offer } from "@/lib/schemas/product";
+import type { ProductDetail, BuyBoxOffer } from "@/lib/schemas/product";
 
 export type DetailVariant = ProductDetail["variants"][number];
 
@@ -6,45 +6,26 @@ export type DerivedBuybox = {
     price: number;
     originalPrice: number | null;
     discountPercent: number | null;
-    condition: Offer["condition"];
+    condition: BuyBoxOffer["condition"];
     stock: number;
-    offer: Offer;
+    offer: BuyBoxOffer;
 } | null;
 
 /**
- * The backend flags the buy-box winner per variant (`isBuyBoxWinner`) — trust it
- * when present. Fallback when none is flagged: in-stock offers first (the backend
- * omits `status`, so a missing status is treated as sellable), then featured,
- * then cheapest, then most stock.
+ * The backend now picks the buy-box winner per variant and returns it as
+ * `variant.buyBox` (null when the variant has no eligible offer). No more
+ * client-side ranking — we just map the winner to the display block.
  */
-export function selectBestOffer(offers: Offer[]): Offer | null {
-    if (offers.length === 0) return null;
-    const winner = offers.find((o) => o.isBuyBoxWinner);
-    if (winner) return winner;
-    const sellable = offers.filter(
-        (o) => o.quantityAvailable > 0 && (o.status == null || o.status === "ACTIVE"),
-    );
-    const pool = sellable.length > 0 ? sellable : offers;
-    return [...pool].sort(
-        (a, b) =>
-            Number(b.isFeatured) - Number(a.isFeatured) ||
-            a.finalPrice - b.finalPrice ||
-            b.quantityAvailable - a.quantityAvailable,
-    )[0]!;
-}
-
 export function deriveBuybox(variant: DetailVariant | undefined): DerivedBuybox {
-    const offers = variant?.offers ?? [];
-    const best = selectBestOffer(offers);
-    if (!best) return null;
-    const discounted = best.discount > 0 && best.finalPrice < best.price;
+    const box = variant?.buyBox;
+    if (!box) return null;
     return {
-        price: best.finalPrice,
-        originalPrice: discounted ? best.price : null,
-        discountPercent: discounted ? Math.round((1 - best.finalPrice / best.price) * 100) : null,
-        condition: best.condition,
-        stock: best.quantityAvailable,
-        offer: best,
+        price: box.finalPrice,
+        originalPrice: box.originalPrice,
+        discountPercent: box.discountPercent,
+        condition: box.condition,
+        stock: box.quantityAvailable,
+        offer: box,
     };
 }
 

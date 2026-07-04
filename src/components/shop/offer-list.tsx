@@ -1,15 +1,12 @@
 import { MessageCircle } from "lucide-react";
-import type { Offer } from "@/lib/schemas/product";
+import type { OfferSummary } from "@/lib/schemas/product";
 import { Button } from "@/components/ui/button";
 import { ConditionBadge } from "./condition-badge";
 import { SellerCard } from "./seller-card";
 import { FEATURES } from "@/lib/features";
+import { formatPrice } from "@/lib/format";
 
-function formatPrice(amount: number): string {
-    return `KSh ${amount.toLocaleString("en-KE")}`;
-}
-
-export function OfferList({ offers }: { offers: Offer[] }) {
+export function OfferList({ offers }: { offers: OfferSummary[] }) {
     if (offers.length === 0) {
         return <p className="text-muted-foreground text-sm">No offers for this option yet.</p>;
     }
@@ -25,9 +22,9 @@ export function OfferList({ offers }: { offers: Offer[] }) {
                         <SellerCard shop={offer.shop} />
                         <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
                             <ConditionBadge condition={offer.condition} />
-                            {offer.deliveryDays != null && (
+                            {/* {offer.deliveryDays != null && (
                                 <span>Delivery ~{offer.deliveryDays} days</span>
-                            )}
+                            )} */}
                         </div>
                     </div>
                     <div className="flex items-center gap-3">

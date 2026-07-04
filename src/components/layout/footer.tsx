@@ -42,6 +42,7 @@ export function Footer() {
                                     Browse All
                                 </Link>
                             </li>
+                            {/* /deals and /categories routes not built yet — commented until built (do not delete):
                             <li>
                                 <Link
                                     href="/deals"
@@ -58,6 +59,7 @@ export function Footer() {
                                     Categories
                                 </Link>
                             </li>
+                            */}
                         </ul>
                     </div>
 
@@ -94,7 +96,7 @@ export function Footer() {
                         </ul>
                     </div>
 
-                    {/* Help */}
+                    {/* Help column — /help and /sell routes not built yet; commented until built (do not delete):
                     <div>
                         <h3 className="text-brand-800 text-sm font-semibold dark:text-white">
                             Help
@@ -118,6 +120,7 @@ export function Footer() {
                             </li>
                         </ul>
                     </div>
+                    */}
                 </div>
             </div>
 

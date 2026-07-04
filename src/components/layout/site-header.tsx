@@ -2,19 +2,26 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/navbar";
 import { SearchBar } from "@/components/layout/search-bar";
 import { CategoryBar } from "@/components/layout/category-bar";
-import type { Customer } from "@/lib/schemas/customer";
-import type { Category } from "@/lib/schemas/category";
+import { getSession } from "@/lib/auth/session";
+import { getCategoryTree } from "@/lib/api/categories";
 
-interface SiteHeaderProps {
-    user: Customer | null;
-    categories: Category[];
-}
+export async function SiteHeader() {
+    const [session, tree] = await Promise.all([
+        getSession(),
+        getCategoryTree().catch((error) => {
+            // Category bar is non-critical chrome — degrade to no bar, but keep the
+            // failure (incl. schema drift) visible in server logs rather than silent.
+            console.error("SiteHeader: failed to load category tree", error);
+            return [];
+        }),
+    ]);
+    const user = session?.user ?? null;
+    const topLevel = tree.map(({ id, name, slug }) => ({ id, name, slug }));
 
-export function SiteHeader({ user, categories }: SiteHeaderProps) {
     return (
         <>
             <header className="bg-brand-800 dark:bg-brand-900">
-                <div className="flex h-[60px] items-center gap-4 px-4 md:gap-6 md:px-6">
+                <div className="flex h-16 items-center gap-4 px-4 md:gap-6 md:px-6">
                     <Link
                         href="/"
                         className="shrink-0 font-[family-name:var(--font-brand)] text-xl font-bold text-white"
@@ -25,7 +32,7 @@ export function SiteHeader({ user, categories }: SiteHeaderProps) {
                         <SearchBar
                             placeholder="Search products, brands, and categories"
                             className="w-full"
-                            categories={categories}
+                            categories={topLevel}
                         />
                     </div>
                     <Navbar user={user} />
@@ -38,7 +45,7 @@ export function SiteHeader({ user, categories }: SiteHeaderProps) {
             </div>
 
             {/* Category bar */}
-            {categories.length > 0 && <CategoryBar categories={categories} />}
+            {tree.length > 0 && <CategoryBar tree={tree} />}
         </>
     );
 }

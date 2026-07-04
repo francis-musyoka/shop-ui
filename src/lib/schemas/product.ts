@@ -31,11 +31,13 @@ export const CategoryRefSchema = z.object({
 /* ── Product card (search results, landing grid) ─────── */
 
 export const BuyboxSchema = z.object({
-    price: z.number().nonnegative(),
+    finalPrice: z.number().nonnegative(),
     originalPrice: z.number().nonnegative().nullable(),
     discountPercent: z.number().min(0).max(100).nullable(),
     condition: z.enum(["NEW", "USED", "REFURBISHED"]),
     stock: z.number().int().nonnegative(),
+    variantId: CUID.optional(),
+    offerId: CUID.optional(),
 });
 
 export type Buybox = z.infer<typeof BuyboxSchema>;
@@ -64,15 +66,18 @@ export type SearchProductsResponse = z.infer<typeof SearchProductsResponseSchema
 
 /* ── Search query params (for building query strings) ── */
 
+const ConditionEnum = z.enum(["NEW", "USED", "REFURBISHED"]);
+
 export const SearchProductsParamsSchema = z.object({
     search: z.string().optional(),
     page: z.coerce.number().int().positive().optional(),
     limit: z.coerce.number().int().min(1).max(50).optional(),
-    categoryId: z.string().optional(),
-    brandId: z.string().optional(),
+    categoryId: z.union([z.string(), z.array(z.string())]).optional(),
+    brandId: z.union([z.string(), z.array(z.string())]).optional(),
     minPrice: z.coerce.number().nonnegative().optional(),
     maxPrice: z.coerce.number().nonnegative().optional(),
-    condition: z.enum(["NEW", "USED", "REFURBISHED"]).optional(),
+    condition: z.union([ConditionEnum, z.array(ConditionEnum)]).optional(),
+    sort: z.enum(["newest", "price_asc", "price_desc"]).optional(),
 });
 
 export type SearchProductsParams = z.infer<typeof SearchProductsParamsSchema>;
@@ -97,39 +102,49 @@ export const NewestListingsResponseSchema = z.object({
 
 export type NewestListingsResponse = z.infer<typeof NewestListingsResponseSchema>;
 
-/* ── Offer (nested inside variant on detail page) ────── */
+/* ── Offer shop ref ──────────────────────────────────── */
 
 export const OfferShopRefSchema = z.object({
     id: CUID,
     name: z.string(),
     slug: z.string(),
-    rating: z.coerce.number(),
+    rating: z.number(), // normalized to a number across all endpoints
 });
 
-export const OfferSchema = z.object({
+/* ── Offer summary (one row of the offers list; also the winner base) ── */
+
+export const OfferSummarySchema = z.object({
     id: CUID,
-    price: z.coerce.number(),
-    discount: z.coerce.number(),
-    quantityTotal: z.number().int().nonnegative(),
-    quantityAvailable: z.number().int().nonnegative(),
     condition: z.enum(["NEW", "USED", "REFURBISHED"]),
-    status: z.string().optional(), // backend product-detail response omits this
+    finalPrice: z.number(), // after discount — display this
+    originalPrice: z.number().nullable(), // pre-discount; null when no discount
+    discountPercent: z.number().nullable(), // null when no discount
+    quantityAvailable: z.number().int().nonnegative(),
     deliveryDays: z.number().int().nonnegative().nullish(),
     warrantyMonths: z.number().int().nonnegative().nullish(),
-    isFeatured: z.boolean(),
-    isBuyBoxWinner: z.boolean().optional(), // backend-designated buy-box winner (one per variant)
     location: z.string().nullish(),
-    finalPrice: z.number(),
     shop: OfferShopRefSchema,
 });
 
-export type Offer = z.infer<typeof OfferSchema>;
+export type OfferSummary = z.infer<typeof OfferSummarySchema>;
 
-/* ── Detail variant (with offers and images) ─────────── */
+/* ── Buy-box winner (variant summary carries one; superset of OfferSummary) ── */
+
+export const BuyBoxOfferSchema = OfferSummarySchema.extend({
+    quantityTotal: z.number().int().nonnegative(),
+    quantityReserved: z.number().int().nonnegative(),
+    isFeatured: z.boolean(),
+    createdAt: z.string(),
+});
+
+export type BuyBoxOffer = z.infer<typeof BuyBoxOfferSchema>;
+
+/* ── Detail variant (winner + count, no offers array) ── */
 
 export const DetailVariantSchema = VariantSummarySchema.extend({
     images: z.array(OrderedImageSchema).optional(),
-    offers: z.array(OfferSchema).optional(),
+    offerCount: z.number().int().nonnegative(),
+    buyBox: BuyBoxOfferSchema.nullable(),
 });
 
 /* ── Category/Brand refs with ID (detail page) ───────── */
@@ -150,6 +165,7 @@ export const ProductDetailSchema = z.object({
     category: CategoryRefWithIdSchema,
     brand: BrandRefWithIdSchema,
     images: z.array(OrderedImageSchema),
+    buyBoxVariantId: CUID.nullable(), // variant holding the product-wide winner; null if no offers
     variants: z.array(DetailVariantSchema),
 });
 
@@ -163,3 +179,13 @@ export const ProductDetailResponseSchema = z.object({
 });
 
 export type ProductDetailResponse = z.infer<typeof ProductDetailResponseSchema>;
+
+/* ── Variant offers list (lazy "compare offers" endpoint) ── */
+
+export const VariantOffersResponseSchema = z.object({
+    success: z.literal(true),
+    data: z.array(OfferSummarySchema),
+    pagination: PaginationSchema,
+});
+
+export type VariantOffersResponse = z.infer<typeof VariantOffersResponseSchema>;

@@ -1,27 +1,27 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { MessageCircle, Heart, Share2, ChevronRight, X } from "lucide-react";
+import { MessageCircle, Heart, Share2, ChevronRight } from "lucide-react";
 import type { ProductDetail } from "@/lib/schemas/product";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { ProductGallery } from "@/components/shop/product-gallery";
 import { VariantSelector } from "@/components/shop/variant-selector";
 import { ConditionBadge } from "@/components/shop/condition-badge";
-import { OfferList } from "@/components/shop/offer-list";
+import { OffersPanel } from "@/components/shop/offers-panel";
 import { deriveBuybox, findVariant, galleryImageUrls } from "@/lib/product-detail";
-import { useModalA11y } from "@/lib/use-modal-a11y";
 import { FEATURES } from "@/lib/features";
-
-function formatPrice(amount: number): string {
-    return `KSh ${amount.toLocaleString("en-KE")}`;
-}
+import { formatPrice } from "@/lib/format";
 
 export function ProductPageClient({ product }: { product: ProductDetail }) {
+    const initialVariant =
+        product.variants.find((v) => v.id === product.buyBoxVariantId) ?? product.variants[0];
+
     const [selectedAttrs, setSelectedAttrs] = useState<Record<string, string>>(
-        () => product.variants[0]?.attributes ?? {},
+        () => initialVariant?.attributes ?? {},
     );
 
     const variant = useMemo(
@@ -30,18 +30,9 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
     );
     const buybox = useMemo(() => deriveBuybox(variant), [variant]);
     const images = useMemo(() => galleryImageUrls(product, variant), [product, variant]);
-    const offers = variant?.offers ?? [];
+    const offerCount = variant?.offerCount ?? 0;
 
     const [offersOpen, setOffersOpen] = useState(false);
-    const offersRef = useModalA11y(offersOpen);
-    useEffect(() => {
-        if (!offersOpen) return;
-        function onKey(e: KeyboardEvent) {
-            if (e.key === "Escape") setOffersOpen(false);
-        }
-        window.addEventListener("keydown", onKey);
-        return () => window.removeEventListener("keydown", onKey);
-    }, [offersOpen]);
 
     return (
         <>
@@ -53,7 +44,7 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                 <div className="md:col-span-4">
                     <div className="flex items-center justify-between">
                         <Link
-                            href={`/brands/${product.brand.slug}`}
+                            href={`/browse?brandId=${product.brand.id}`}
                             className="text-brand-600 dark:text-brand-400 text-sm font-medium hover:underline"
                         >
                             {product.brand.name} &rsaquo;
@@ -110,12 +101,15 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                             <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
                                 <span className="text-muted-foreground">
                                     Sold by: {"  "}
-                                    <Link
+                                    {/* <Link
                                         href={`/shops/${buybox.offer.shop.slug}`}
                                         className="text-brand-600 dark:text-brand-400 font-medium hover:underline"
                                     >
                                         {buybox.offer.shop.name}
-                                    </Link>
+                                    </Link> */}
+                                    <span className="text-brand-600 dark:text-brand-400 font-medium">
+                                        {buybox.offer.shop.name}
+                                    </span>
                                 </span>
                                 <ConditionBadge condition={buybox.condition} />
                             </div>
@@ -169,7 +163,7 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
 
                 {/* Available offers */}
                 <aside className="md:col-span-3">
-                    {offers.length > 0 && (
+                    {offerCount > 0 && (
                         <div className="border-border bg-card rounded-sm border">
                             <h2 className="border-border border-b px-4 py-3 text-sm font-semibold">
                                 Available offers
@@ -180,8 +174,8 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                                 className="text-foreground hover:bg-muted flex w-full items-center justify-between gap-2 px-4 py-3 text-left text-sm transition-colors duration-100"
                             >
                                 <span>
-                                    {offers.length} {offers.length === 1 ? "seller" : "sellers"}{" "}
-                                    offering this product
+                                    {offerCount} {offerCount === 1 ? "seller" : "sellers"} offering
+                                    this product
                                 </span>
                                 <ChevronRight
                                     size={16}
@@ -194,38 +188,23 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
             </section>
 
             {/* Available offers drawer — slides in from the right */}
-            {offersOpen && (
-                <div
-                    ref={offersRef}
-                    className="fixed inset-0 z-50 flex outline-none"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label="Available offers"
-                    tabIndex={-1}
+            <Sheet open={offersOpen} onOpenChange={setOffersOpen}>
+                <SheetContent
+                    side="right"
+                    className="gap-0 p-0 data-[side=right]:w-full sm:data-[side=right]:max-w-md"
                 >
-                    <div
-                        className="fixed inset-0 bg-black/50"
-                        onClick={() => setOffersOpen(false)}
-                        aria-hidden="true"
-                    />
-                    <div className="bg-card relative z-10 ml-auto flex h-full w-full max-w-md flex-col shadow-lg">
-                        <div className="border-border flex items-center justify-between border-b px-4 py-3">
-                            <span className="text-base font-semibold">Available offers</span>
-                            <button
-                                type="button"
-                                onClick={() => setOffersOpen(false)}
-                                className="text-muted-foreground hover:text-foreground rounded-sm p-1"
-                                aria-label="Close offers"
-                            >
-                                <X className="size-5" />
-                            </button>
-                        </div>
-                        <div className="flex-1 overflow-y-auto px-4 py-2">
-                            <OfferList offers={offers} />
-                        </div>
+                    <SheetHeader className="border-border border-b">
+                        <SheetTitle>Available offers</SheetTitle>
+                    </SheetHeader>
+                    <div className="flex-1 overflow-y-auto px-4 py-2">
+                        <OffersPanel
+                            slug={product.slug}
+                            variantId={variant?.id}
+                            open={offersOpen}
+                        />
                     </div>
-                </div>
-            )}
+                </SheetContent>
+            </Sheet>
         </>
     );
 }

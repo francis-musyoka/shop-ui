@@ -2,23 +2,20 @@ import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { OfferList } from "./offer-list";
-import type { Offer } from "@/lib/schemas/product";
+import type { OfferSummary } from "@/lib/schemas/product";
 
-const offers: Offer[] = [
+const offers: OfferSummary[] = [
     {
-        id: "of1",
-        price: 12000,
-        discount: 1800,
-        quantityTotal: 5,
-        quantityAvailable: 5,
+        id: "of1aaaaaaaaaaaaaaaaaaaaaa",
         condition: "NEW",
-        status: "ACTIVE",
+        finalPrice: 10200,
+        originalPrice: 12000,
+        discountPercent: 15,
+        quantityAvailable: 5,
         deliveryDays: 2,
         warrantyMonths: 12,
-        isFeatured: true,
         location: "Nairobi",
-        finalPrice: 10200,
-        shop: { id: "s1", name: "Shop One", slug: "shop-one", rating: 4.6 },
+        shop: { id: "s1aaaaaaaaaaaaaaaaaaaaaa", name: "Shop One", slug: "shop-one", rating: 4.6 },
     },
 ];
 

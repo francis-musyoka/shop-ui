@@ -12,7 +12,7 @@ const mockProduct: ProductCard = {
     variantCount: 3,
     offerCount: 5,
     buybox: {
-        price: 145000,
+        finalPrice: 145000,
         originalPrice: 160000,
         discountPercent: 9.375,
         condition: "NEW",

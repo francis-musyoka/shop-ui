@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import { SellerCard } from "./seller-card";
 
 describe("SellerCard", () => {
-    it("renders the shop name linking to its storefront", () => {
+    it("renders the shop name as text (storefront link deferred until /shops exists)", () => {
         render(
             <SellerCard
                 shop={{
@@ -15,7 +15,11 @@ describe("SellerCard", () => {
                 }}
             />,
         );
-        const link = screen.getByRole("link", { name: /Riverflow Electronics/ });
-        expect(link).toHaveAttribute("href", "/shops/riverflow-electronics");
+        // The /shops/[slug] route isn't built yet, so the name renders as plain
+        // text rather than a link — see the commented-out Link in the component.
+        expect(screen.getByText("Riverflow Electronics")).toBeInTheDocument();
+        expect(
+            screen.queryByRole("link", { name: /Riverflow Electronics/ }),
+        ).not.toBeInTheDocument();
     });
 });

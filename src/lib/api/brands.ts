@@ -1,5 +1,5 @@
 import "server-only";
-import { apiFetch } from "./client";
+import { apiFetch, STATIC_DATA_REVALIDATE } from "./client";
 import type { Brand } from "@/lib/schemas/brand";
 import { BrandListResponseSchema } from "@/lib/schemas/brand";
 
@@ -11,7 +11,7 @@ export async function listBrands(): Promise<Brand[]> {
         path: "/api/brands",
         schema: BrandListResponseSchema,
         forwardCookies: false,
-        cache: "force-cache",
+        revalidate: STATIC_DATA_REVALIDATE,
         tags: ["brands"],
     });
     return res.brands;

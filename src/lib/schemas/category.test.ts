@@ -23,8 +23,19 @@ describe("CategoryTreeNodeSchema", () => {
         const node = categoryFixtures.treeSuccess.categories[0];
         const parsed = CategoryTreeNodeSchema.parse(node);
         expect(parsed.children).toHaveLength(2);
-        expect(parsed.children[0]!.children).toHaveLength(1);
-        expect(parsed.children[0]!.children[0]!.name).toBe("Smartphones");
+        expect(parsed.children![0]!.children).toHaveLength(1);
+        expect(parsed.children![0]!.children![0]!.name).toBe("Smartphones");
+    });
+
+    it("parses a leaf node that omits children (real backend shape)", () => {
+        const leaf = {
+            id: "cmo36qh6l003fplvqwa7k4zov",
+            name: "Car Electronics",
+            slug: "car-electronics",
+        };
+        const parsed = CategoryTreeNodeSchema.parse(leaf);
+        expect(parsed.name).toBe("Car Electronics");
+        expect(parsed.children).toBeUndefined();
     });
 });
 
