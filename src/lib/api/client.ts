@@ -76,7 +76,10 @@ async function sendOnce<TSchema extends z.ZodTypeAny>(
     const headers: Record<string, string> = {};
     let body: BodyInit | undefined;
 
-    if (req.body !== undefined) {
+    if (req.body instanceof FormData) {
+        // Let fetch set Content-Type itself so it includes the multipart boundary.
+        body = req.body;
+    } else if (req.body !== undefined) {
         headers["Content-Type"] = "application/json";
         body = JSON.stringify(req.body);
     }
