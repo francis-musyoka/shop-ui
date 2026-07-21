@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ConditionBadge } from "./condition-badge";
 import { SellerCard } from "./seller-card";
 import { FEATURES } from "@/lib/features";
-import { formatPrice } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 
 export function OfferList({ offers }: { offers: OfferSummary[] }) {
     if (offers.length === 0) {

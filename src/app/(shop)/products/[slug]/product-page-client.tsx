@@ -14,7 +14,7 @@ import { ConditionBadge } from "@/components/shop/condition-badge";
 import { OffersPanel } from "@/components/shop/offers-panel";
 import { deriveBuybox, findVariant, galleryImageUrls } from "@/lib/product-detail";
 import { FEATURES } from "@/lib/features";
-import { formatPrice } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 
 export function ProductPageClient({ product }: { product: ProductDetail }) {
     const initialVariant =

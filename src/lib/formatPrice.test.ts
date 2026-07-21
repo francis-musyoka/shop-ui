@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatPrice } from "./format";
+import { formatPrice } from "./formatPrice";
 
 describe("formatPrice", () => {
     it("prefixes KSh and groups thousands", () => {

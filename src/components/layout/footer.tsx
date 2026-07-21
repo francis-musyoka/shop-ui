@@ -112,7 +112,7 @@ export function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href="/sell"
+                                    href="/seller/sell"
                                     className="hover:text-brand-900 dark:hover:text-white"
                                 >
                                     Sell on Riverflow
