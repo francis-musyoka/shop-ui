@@ -9,8 +9,6 @@ export async function SiteHeader() {
     const [session, tree] = await Promise.all([
         getSession(),
         getCategoryTree().catch((error) => {
-            // Category bar is non-critical chrome — degrade to no bar, but keep the
-            // failure (incl. schema drift) visible in server logs rather than silent.
             console.error("SiteHeader: failed to load category tree", error);
             return [];
         }),
@@ -24,7 +22,7 @@ export async function SiteHeader() {
                 <div className="flex h-16 items-center gap-4 px-4 md:gap-6 md:px-6">
                     <Link
                         href="/"
-                        className="shrink-0 font-[family-name:var(--font-brand)] text-xl font-bold text-white"
+                        className="shrink-0 font-(family-name:--font-brand) text-xl font-bold text-white"
                     >
                         Riverflow
                     </Link>

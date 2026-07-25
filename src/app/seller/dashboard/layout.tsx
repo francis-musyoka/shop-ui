@@ -3,11 +3,18 @@ import { redirect } from "next/navigation";
 import { User } from "lucide-react";
 import { getMyShop } from "@/lib/api/shops";
 import { ApiError } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/auth/require-auth";
+import { isSeller } from "@/lib/seller/is-seller";
 import { SidebarContent } from "@/components/seller/sidebar-content";
 import { MobileSidebar } from "@/components/seller/mobile-sidebar";
 import { ShopStatusNotice } from "@/components/seller/shop-status-notice";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+    const session = await requireAuth();
+    if (!isSeller(session.user)) {
+        redirect("/seller/sell");
+    }
+
     let shop;
     try {
         shop = await getMyShop();
@@ -26,7 +33,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                     <MobileSidebar shop={shop} />
                     <Link
                         href="/"
-                        className="font-[family-name:var(--font-brand)] text-xl font-bold text-white"
+                        className="font-(family-name:--font-brand) text-xl font-bold text-white"
                     >
                         Riverflow
                     </Link>

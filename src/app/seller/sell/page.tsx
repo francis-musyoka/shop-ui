@@ -2,11 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Store, ArrowLeft, PackageCheck, MessagesSquare, BadgeCheck } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { getMyShop } from "@/lib/api/shops";
-import { ApiError } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/auth/require-auth";
+import { isSeller } from "@/lib/seller/is-seller";
 
-// The gate shown when `GET /api/shops/my-shop` 404s — the user is signed in but hasn't
-// opened a shop yet. Rendered without the dashboard sidebar (nothing to navigate to yet).
+// The gate shown to a signed-in user whose role isn't SELLER yet — they haven't opened a
+// shop. Rendered without the dashboard sidebar (nothing to navigate to yet).
 const perks = [
     {
         icon: PackageCheck,
@@ -26,17 +26,8 @@ const perks = [
 ];
 
 export default async function SellPage() {
-    let hasShop = true;
-    try {
-        await getMyShop();
-    } catch (err) {
-        if (err instanceof ApiError && err.statusCode === 404) {
-            hasShop = false;
-        } else {
-            throw err;
-        }
-    }
-    if (hasShop) {
+    const session = await requireAuth();
+    if (isSeller(session.user)) {
         redirect("/seller/dashboard");
     }
 
@@ -46,7 +37,7 @@ export default async function SellPage() {
                 <div className="flex h-14 items-center px-4 md:px-6">
                     <Link
                         href="/"
-                        className="font-[family-name:var(--font-brand)] text-xl font-bold text-white"
+                        className="font-(family-name:--font-brand) text-xl font-bold text-white"
                     >
                         Riverflow
                     </Link>
@@ -57,7 +48,7 @@ export default async function SellPage() {
                 <div className="bg-brand-50 dark:bg-brand-400/10 mx-auto flex size-16 items-center justify-center rounded-full">
                     <Store className="text-brand-600 dark:text-brand-400" size={28} />
                 </div>
-                <h1 className="mt-5 font-[family-name:var(--font-brand)] text-xl font-bold">
+                <h1 className="mt-5 font-(family-name:--font-brand) text-xl font-bold">
                     Start selling on Riverflow
                 </h1>
                 <p className="text-muted-foreground mx-auto mt-2 max-w-md text-sm">

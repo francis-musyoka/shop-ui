@@ -1,25 +1,16 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ChevronRight } from "lucide-react";
-import { getMyShop } from "@/lib/api/shops";
 import { getCategoryTree } from "@/lib/api/categories";
-import { ApiError } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/auth/require-auth";
+import { isSeller } from "@/lib/seller/is-seller";
 import { OpenShopForm } from "./open-shop-form";
 
 // Create-shop entry point. If the seller already has a shop, there's nothing to open —
 // send them straight to the dashboard. Otherwise load the category tree the picker needs.
 export default async function OpenShopPage() {
-    let hasShop = true;
-    try {
-        await getMyShop();
-    } catch (err) {
-        if (err instanceof ApiError && err.statusCode === 404) {
-            hasShop = false;
-        } else {
-            throw err;
-        }
-    }
-    if (hasShop) {
+    const session = await requireAuth();
+    if (isSeller(session.user)) {
         redirect("/seller/dashboard");
     }
 
