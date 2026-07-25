@@ -43,7 +43,7 @@ export function ListingsTable({
 
     return (
         <div className="border-border bg-card overflow-x-auto rounded-sm border">
-            <Table className="min-w-[760px]">
+            <Table className="min-w-190">
                 <TableHeader>
                     <TableRow className="text-muted-foreground text-xs uppercase">
                         <TableHead className="px-4">Product</TableHead>
