@@ -159,9 +159,9 @@ export function ShopFormFields({
                             Category
                             <Req />
                         </Label>
+                        <input type="hidden" name="categoryId" value={category?.id ?? ""} />
                         {disableCategory ? (
                             <>
-                                <input type="hidden" name="categoryId" value={category?.id ?? ""} />
                                 <div
                                     role="textbox"
                                     aria-readonly="true"
@@ -397,15 +397,29 @@ function CategoryPicker({
                     )}
                     {nodes.map((node) =>
                         node.children?.length ? (
-                            <button
+                            <div
                                 key={node.id}
-                                type="button"
-                                onClick={() => setPath((p) => [...p, node])}
-                                className="hover:bg-muted flex items-center justify-between rounded-sm px-3 py-2 text-left text-sm"
+                                className="hover:bg-muted flex items-center justify-between gap-2 rounded-sm px-3 py-2 text-sm"
                             >
-                                {node.name}
-                                <ChevronRight className="text-muted-foreground" size={14} />
-                            </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setPath((p) => [...p, node])}
+                                    className="flex flex-1 items-center justify-between gap-1 text-left"
+                                >
+                                    {node.name}
+                                    <ChevronRight className="text-muted-foreground" size={14} />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        onSelect({ id: node.id, name: node.name });
+                                        handleOpenChange(false);
+                                    }}
+                                    className="text-brand-600 dark:text-brand-400 shrink-0 text-xs font-medium hover:underline"
+                                >
+                                    Select this category
+                                </button>
+                            </div>
                         ) : (
                             <button
                                 key={node.id}
