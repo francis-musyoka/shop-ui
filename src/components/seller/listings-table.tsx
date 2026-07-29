@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { ConditionBadge } from "@/components/shop/condition-badge";
-import { OfferStatusBadge } from "@/components/seller/offer-status-badge";
+import { OfferStatusBadge, OFFER_STATUS_CONFIG } from "@/components/seller/offer-status-badge";
 import { AddListingButton } from "@/components/seller/add-listing-button";
 import { ListingRowActions } from "@/components/seller/listing-row-actions";
 import { composeVariantLabel } from "@/lib/shop-slug";
@@ -20,11 +20,13 @@ import type { SellerListing } from "@/lib/schemas/offer";
 export function ListingsTable({
     listings,
     canManage,
+    status,
 }: {
     listings: SellerListing[];
     canManage: boolean;
+    status?: SellerListing["status"];
 }) {
-    if (listings.length === 0) {
+    if (listings.length === 0 && !status) {
         return (
             <div className="border-border bg-card flex flex-col items-center gap-3 rounded-sm border px-6 py-16 text-center">
                 <div className="bg-muted flex size-12 items-center justify-center rounded-sm">
@@ -56,98 +58,112 @@ export function ListingsTable({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {listings.map((l) => {
-                        const stock = l.quantityAvailable;
-                        const lowStock = stock > 0 && stock <= 5;
-                        const hasDiscount =
-                            l.price.discountPercent != null && l.price.discountPercent > 0;
-                        return (
-                            <TableRow key={l.id}>
-                                {/* Product */}
-                                <TableCell className="px-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-muted relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-sm">
-                                            {l.variant.mainImageUrl ? (
-                                                <Image
-                                                    src={l.variant.mainImageUrl}
-                                                    alt=""
-                                                    fill
-                                                    unoptimized
-                                                    sizes="44px"
-                                                    className="object-cover"
-                                                />
-                                            ) : (
-                                                <Store
-                                                    className="text-muted-foreground"
-                                                    size={18}
-                                                />
-                                            )}
+                    {listings.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={7}
+                                className="text-muted-foreground py-16 text-center"
+                            >
+                                You don&apos;t have any{" "}
+                                {OFFER_STATUS_CONFIG[status!].label.toLowerCase()} listings.
+                            </TableCell>
+                        </TableRow>
+                    ) : (
+                        listings.map((l) => {
+                            const stock = l.quantityAvailable;
+                            const lowStock = stock > 0 && stock <= 5;
+                            const hasDiscount =
+                                l.price.discountPercent != null && l.price.discountPercent > 0;
+                            return (
+                                <TableRow key={l.id}>
+                                    {/* Product */}
+                                    <TableCell className="px-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="bg-muted relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-sm">
+                                                {l.variant.mainImageUrl ? (
+                                                    <Image
+                                                        src={l.variant.mainImageUrl}
+                                                        alt=""
+                                                        fill
+                                                        unoptimized
+                                                        sizes="44px"
+                                                        className="object-cover"
+                                                    />
+                                                ) : (
+                                                    <Store
+                                                        className="text-muted-foreground"
+                                                        size={18}
+                                                    />
+                                                )}
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="truncate font-medium">
+                                                    {l.product.title}
+                                                </p>
+                                                <p className="text-muted-foreground truncate text-xs">
+                                                    {composeVariantLabel(l.variant.attributes)}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="min-w-0">
-                                            <p className="truncate font-medium">
-                                                {l.product.title}
-                                            </p>
-                                            <p className="text-muted-foreground truncate text-xs">
-                                                {composeVariantLabel(l.variant.attributes)}
-                                            </p>
+                                    </TableCell>
+                                    {/* Category */}
+                                    <TableCell className="text-muted-foreground">
+                                        {l.category.name}
+                                    </TableCell>
+                                    {/* Condition */}
+                                    <TableCell>
+                                        <ConditionBadge condition={l.condition} />
+                                    </TableCell>
+                                    {/* Price */}
+                                    <TableCell className="text-right">
+                                        <div className="text-brand-800 dark:text-gold-300 font-mono font-semibold">
+                                            {formatPrice(l.price.finalPrice)}
                                         </div>
-                                    </div>
-                                </TableCell>
-                                {/* Category */}
-                                <TableCell className="text-muted-foreground">
-                                    {l.category.name}
-                                </TableCell>
-                                {/* Condition */}
-                                <TableCell>
-                                    <ConditionBadge condition={l.condition} />
-                                </TableCell>
-                                {/* Price */}
-                                <TableCell className="text-right">
-                                    <div className="text-brand-800 dark:text-gold-300 font-mono font-semibold">
-                                        {formatPrice(l.price.finalPrice)}
-                                    </div>
-                                    {hasDiscount && (
-                                        <div className="text-muted-foreground font-mono text-xs line-through">
-                                            {formatPrice(
-                                                l.price.originalPrice ?? l.price.finalPrice,
-                                            )}
-                                        </div>
-                                    )}
-                                </TableCell>
-                                {/* Stock */}
-                                <TableCell className="text-right font-mono">
-                                    {stock === 0 ? (
-                                        <span className="text-destructive font-medium">0</span>
-                                    ) : (
-                                        <span
-                                            className={
-                                                lowStock ? "text-gold-500 font-medium" : undefined
-                                            }
-                                        >
-                                            {stock}
-                                        </span>
-                                    )}
-                                </TableCell>
-                                {/* Status */}
-                                <TableCell>
-                                    <OfferStatusBadge status={l.status} />
-                                </TableCell>
-                                {/* Actions — edit/set price/activate-deactivate dialogs.
+                                        {hasDiscount && (
+                                            <div className="text-muted-foreground font-mono text-xs line-through">
+                                                {formatPrice(
+                                                    l.price.originalPrice ?? l.price.finalPrice,
+                                                )}
+                                            </div>
+                                        )}
+                                    </TableCell>
+                                    {/* Stock */}
+                                    <TableCell className="text-right font-mono">
+                                        {stock === 0 ? (
+                                            <span className="text-destructive font-medium">0</span>
+                                        ) : (
+                                            <span
+                                                className={
+                                                    lowStock
+                                                        ? "text-gold-500 font-medium"
+                                                        : undefined
+                                                }
+                                            >
+                                                {stock}
+                                            </span>
+                                        )}
+                                    </TableCell>
+                                    {/* Status */}
+                                    <TableCell>
+                                        <OfferStatusBadge status={l.status} />
+                                    </TableCell>
+                                    {/* Actions — edit/set price/activate-deactivate dialogs.
                                     Only available when the shop can manage listings;
                                     otherwise a disabled trigger so the row still reads as
                                     "actions unavailable" rather than broken. */}
-                                <TableCell className="px-4 text-right">
-                                    {canManage ? (
-                                        <ListingRowActions listing={l} />
-                                    ) : (
-                                        <Button variant="ghost" size="icon-sm" disabled>
-                                            <MoreHorizontal size={16} />
-                                        </Button>
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        );
-                    })}
+                                    <TableCell className="px-4 text-right">
+                                        {canManage ? (
+                                            <ListingRowActions listing={l} />
+                                        ) : (
+                                            <Button variant="ghost" size="icon-sm" disabled>
+                                                <MoreHorizontal size={16} />
+                                            </Button>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })
+                    )}
                 </TableBody>
             </Table>
         </div>

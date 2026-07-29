@@ -43,7 +43,7 @@ export default async function ListingsPage({
 
             <FilterBar categories={categories} canManage={canManage} />
 
-            <ListingsTable listings={res.data} canManage={canManage} />
+            <ListingsTable listings={res.data} canManage={canManage} status={filters.status[0]} />
 
             <ListingsPagination page={res.pagination.page} totalPages={res.pagination.totalPages} />
         </div>
