@@ -1,6 +1,7 @@
 import { searchProducts } from "@/lib/api/products";
 import { getCategoryTree } from "@/lib/api/categories";
 import { listBrands } from "@/lib/api/brands";
+import { pruneCategoryTree, filterAvailable } from "@/lib/category-filters";
 import {
     parseBrowseParams,
     toSearchProductsParams,
@@ -22,7 +23,7 @@ export default async function BrowsePage({
     const filters = parseBrowseParams(await searchParams);
     const params = toSearchProductsParams(filters);
 
-    const [res, tree, brands] = await Promise.all([
+    const [res, rawTree, rawBrands] = await Promise.all([
         searchProducts(params),
         // Facets are non-critical — degrade to an empty facet list on failure, but
         // log it (incl. schema drift) instead of swallowing silently.
@@ -35,6 +36,9 @@ export default async function BrowsePage({
             return [];
         }),
     ]);
+
+    const tree = pruneCategoryTree(rawTree);
+    const brands = filterAvailable(rawBrands);
 
     // Filter panel keeps a flat top-level list; derive it from the tree roots so
     // its category IDs match the (freshly-fetched) tree the header uses, instead
