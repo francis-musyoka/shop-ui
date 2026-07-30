@@ -4,9 +4,10 @@ import { SearchBar } from "@/components/layout/search-bar";
 import { CategoryBar } from "@/components/layout/category-bar";
 import { getSession } from "@/lib/auth/session";
 import { getCategoryTree } from "@/lib/api/categories";
+import { pruneCategoryTree } from "@/lib/category-filters";
 
 export async function SiteHeader() {
-    const [session, tree] = await Promise.all([
+    const [session, rawTree] = await Promise.all([
         getSession(),
         getCategoryTree().catch((error) => {
             console.error("SiteHeader: failed to load category tree", error);
@@ -14,6 +15,7 @@ export async function SiteHeader() {
         }),
     ]);
     const user = session?.user ?? null;
+    const tree = pruneCategoryTree(rawTree);
     const topLevel = tree.map(({ id, name, slug }) => ({ id, name, slug }));
 
     return (
@@ -43,7 +45,7 @@ export async function SiteHeader() {
             </div>
 
             {/* Category bar */}
-            {tree.length > 0 && <CategoryBar tree={tree} />}
+            {<CategoryBar tree={tree} />}
         </>
     );
 }
