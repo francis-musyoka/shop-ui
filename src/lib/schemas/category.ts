@@ -7,6 +7,7 @@ export const CategorySchema = z.object({
     id: CUID,
     name: z.string(),
     slug: z.string(),
+    productCount: z.number().int().nonnegative().optional(),
 });
 
 export type Category = z.infer<typeof CategorySchema>;
@@ -17,6 +18,7 @@ export interface CategoryTreeNode {
     id: string;
     name: string;
     slug: string;
+    productCount?: number;
     children?: CategoryTreeNode[];
 }
 
@@ -25,6 +27,7 @@ export const CategoryTreeNodeSchema: z.ZodType<CategoryTreeNode> = z.lazy(() =>
         id: CUID,
         name: z.string(),
         slug: z.string(),
+        productCount: z.number().int().nonnegative().optional(),
         children: z.array(CategoryTreeNodeSchema).optional(),
     }),
 );

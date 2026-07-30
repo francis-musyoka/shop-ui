@@ -16,6 +16,25 @@ describe("CategorySchema", () => {
         expect(parsed.name).toBe("Electronics");
         expect(parsed.slug).toBe("electronics");
     });
+
+    it("parses productCount when present", () => {
+        const parsed = CategorySchema.parse({
+            id: "cl9ebqhxk00040cat00000001",
+            name: "Electronics",
+            slug: "electronics",
+            productCount: 42,
+        });
+        expect(parsed.productCount).toBe(42);
+    });
+
+    it("leaves productCount undefined when absent", () => {
+        const parsed = CategorySchema.parse({
+            id: "cl9ebqhxk00040cat00000001",
+            name: "Electronics",
+            slug: "electronics",
+        });
+        expect(parsed.productCount).toBeUndefined();
+    });
 });
 
 describe("CategoryTreeNodeSchema", () => {
@@ -36,6 +55,16 @@ describe("CategoryTreeNodeSchema", () => {
         const parsed = CategoryTreeNodeSchema.parse(leaf);
         expect(parsed.name).toBe("Car Electronics");
         expect(parsed.children).toBeUndefined();
+    });
+
+    it("parses productCount on a tree node when present", () => {
+        const parsed = CategoryTreeNodeSchema.parse({
+            id: "cl9ebqhxk00040cat00000001",
+            name: "Electronics",
+            slug: "electronics",
+            productCount: 7,
+        });
+        expect(parsed.productCount).toBe(7);
     });
 });
 
