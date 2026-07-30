@@ -3,6 +3,7 @@ import { getTopLevelCategories } from "@/lib/api/categories";
 import { getNewestListings } from "@/lib/api/products";
 import { PageContainer } from "@/components/layout/page-container";
 import { ListingCard } from "@/components/shop/listing-card";
+import { filterAvailable } from "@/lib/category-filters";
 
 export default async function LandingPage() {
     const [categoriesResult, productsResult] = await Promise.allSettled([
@@ -10,7 +11,8 @@ export default async function LandingPage() {
         getNewestListings({ limit: 18, perCategory: 3 }),
     ]);
 
-    const categories = categoriesResult.status === "fulfilled" ? categoriesResult.value : [];
+    const categories =
+        categoriesResult.status === "fulfilled" ? filterAvailable(categoriesResult.value) : [];
     const products = productsResult.status === "fulfilled" ? productsResult.value.data : [];
 
     return (
@@ -43,7 +45,7 @@ export default async function LandingPage() {
                 <section className="py-16">
                     <PageContainer className="text-center">
                         <p className="text-muted-foreground/30 text-[2rem]">🏪</p>
-                        <h2 className="mt-2 font-[family-name:var(--font-brand)] text-base font-semibold">
+                        <h2 className="mt-2 font-(family-name:--font-brand) text-base font-semibold">
                             Nothing here yet
                         </h2>
                         <p className="text-muted-foreground mt-1 text-[0.8125rem]">
