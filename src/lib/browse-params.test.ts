@@ -15,8 +15,8 @@ describe("parseBrowseParams", () => {
         const f = parseBrowseParams({});
         expect(f).toEqual({
             search: undefined,
-            categoryId: [],
-            brandId: [],
+            category: [],
+            brand: [],
             condition: [],
             minPrice: undefined,
             maxPrice: undefined,
@@ -28,13 +28,13 @@ describe("parseBrowseParams", () => {
     it("splits CSV lists and maps q to search", () => {
         const f = parseBrowseParams({
             q: "laptop",
-            categoryId: "a,b",
-            brandId: "x",
+            category: "a,b",
+            brand: "x",
             condition: "NEW,USED",
         });
         expect(f.search).toBe("laptop");
-        expect(f.categoryId).toEqual(["a", "b"]);
-        expect(f.brandId).toEqual(["x"]);
+        expect(f.category).toEqual(["a", "b"]);
+        expect(f.brand).toEqual(["x"]);
         expect(f.condition).toEqual(["NEW", "USED"]);
     });
 
@@ -62,8 +62,8 @@ describe("toSearchProductsParams", () => {
     it("maps filters to API params with the fixed limit", () => {
         const params = toSearchProductsParams({
             search: "tv",
-            categoryId: ["a"],
-            brandId: [],
+            category: ["a"],
+            brand: [],
             condition: ["NEW"],
             minPrice: 5000,
             maxPrice: undefined,
@@ -72,7 +72,7 @@ describe("toSearchProductsParams", () => {
         });
         expect(params).toEqual({
             search: "tv",
-            categoryId: ["a"],
+            category: ["a"],
             condition: ["NEW"],
             minPrice: 5000,
             sort: "price_desc",
@@ -84,8 +84,8 @@ describe("toSearchProductsParams", () => {
     it("omits empty arrays, undefined price, and default sort", () => {
         const params = toSearchProductsParams({
             search: undefined,
-            categoryId: [],
-            brandId: [],
+            category: [],
+            brand: [],
             condition: [],
             minPrice: undefined,
             maxPrice: undefined,

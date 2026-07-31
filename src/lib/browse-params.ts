@@ -25,8 +25,8 @@ export type RawSearchParams = Record<string, string | string[] | undefined>;
 
 export interface BrowseFilters {
     search: string | undefined;
-    categoryId: string[];
-    brandId: string[];
+    category: string[];
+    brand: string[];
     condition: ConditionValue[];
     minPrice: number | undefined;
     maxPrice: number | undefined;
@@ -70,8 +70,8 @@ export function parseBrowseParams(raw: RawSearchParams): BrowseFilters {
 
     return {
         search,
-        categoryId: csv(raw.categoryId),
-        brandId: csv(raw.brandId),
+        category: csv(raw.category),
+        brand: csv(raw.brand),
         condition,
         minPrice: toNumber(raw.minPrice),
         maxPrice: toNumber(raw.maxPrice),
@@ -83,8 +83,8 @@ export function parseBrowseParams(raw: RawSearchParams): BrowseFilters {
 export function toSearchProductsParams(f: BrowseFilters): SearchProductsParams {
     const params: SearchProductsParams = { limit: PAGE_SIZE, page: f.page };
     if (f.search) params.search = f.search;
-    if (f.categoryId.length) params.categoryId = f.categoryId;
-    if (f.brandId.length) params.brandId = f.brandId;
+    if (f.category.length) params.category = f.category;
+    if (f.brand.length) params.brand = f.brand;
     if (f.condition.length) params.condition = f.condition;
     if (f.minPrice !== undefined) params.minPrice = f.minPrice;
     if (f.maxPrice !== undefined) params.maxPrice = f.maxPrice;
