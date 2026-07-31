@@ -28,7 +28,7 @@ export function FilterBar({
     categories,
     canManage,
 }: {
-    categories: { id: string; name: string }[];
+    categories: { id: string; name: string; slug: string }[];
     canManage: boolean;
 }) {
     const router = useRouter();
@@ -36,7 +36,7 @@ export function FilterBar({
     const searchParams = useSearchParams();
 
     const condition = getCsv(searchParams, "condition");
-    const categoryId = getCsv(searchParams, "categoryId");
+    const category = getCsv(searchParams, "category");
     const [search, setSearch] = useState(searchParams.get("q") ?? "");
 
     // Keep the input in sync when the URL changes from elsewhere (e.g. a tab switch
@@ -71,10 +71,10 @@ export function FilterBar({
             label: CONDITION_OPTIONS.find((c) => c.value === value)?.label ?? value,
             onRemove: () => toggle("condition", value),
         })),
-        ...categoryId.map((value) => ({
-            key: `categoryId:${value}`,
-            label: categories.find((c) => c.id === value)?.name ?? value,
-            onRemove: () => toggle("categoryId", value),
+        ...category.map((value) => ({
+            key: `category:${value}`,
+            label: categories.find((c) => c.slug === value)?.name ?? value,
+            onRemove: () => toggle("category", value),
         })),
     ];
 
@@ -137,9 +137,9 @@ export function FilterBar({
                                                     className="text-foreground/90 flex cursor-pointer items-center gap-2 py-1 text-sm"
                                                 >
                                                     <Checkbox
-                                                        checked={categoryId.includes(cat.id)}
+                                                        checked={category.includes(cat.slug)}
                                                         onCheckedChange={() =>
-                                                            toggle("categoryId", cat.id)
+                                                            toggle("category", cat.slug)
                                                         }
                                                     />
                                                     <span className="truncate">{cat.name}</span>

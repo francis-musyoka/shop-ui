@@ -29,7 +29,7 @@ export default async function ListingsPage({
 
     const canManage = canManageListings(shop.status);
     // Filter bar keeps a flat top-level list, same as the browse FilterPanel.
-    const categories = tree.map(({ id, name }) => ({ id, name }));
+    const categories = tree.map(({ id, name, slug }) => ({ id, name, slug }));
     const total = res.pagination.total;
 
     return (
