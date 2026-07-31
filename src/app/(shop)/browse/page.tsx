@@ -43,7 +43,7 @@ export default async function BrowsePage({
     // Filter panel keeps a flat top-level list; derive it from the tree roots so
     // its category IDs match the (freshly-fetched) tree the header uses, instead
     // of the separately-cached flat endpoint that can go stale after a reseed.
-    const categories = tree.map(({ id, name }) => ({ id, name }));
+    const categories = tree.map(({ id, name, slug }) => ({ id, name, slug }));
 
     const products = res.data;
     const total = res.pagination.total;
