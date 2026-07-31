@@ -44,7 +44,7 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                 <div className="md:col-span-4">
                     <div className="flex items-center justify-between">
                         <Link
-                            href={`/browse?brandId=${product.brand.id}`}
+                            href={`/browse?brand=${product.brand.slug}`}
                             className="text-brand-600 dark:text-brand-400 text-sm font-medium hover:underline"
                         >
                             {product.brand.name} &rsaquo;
