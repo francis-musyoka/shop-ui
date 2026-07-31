@@ -5,8 +5,8 @@ import Link from "next/link";
 import { ChevronRight, ChevronLeft, X } from "lucide-react";
 import type { CategoryTreeNode } from "@/lib/schemas/category";
 
-function browseHref(id: string) {
-    return `/browse?categoryId=${id}`;
+function browseHref(pathNodes: CategoryTreeNode[]) {
+    return `/browse?category=${pathNodes.map((n) => n.slug).join("/")}`;
 }
 
 interface CategoryDrilldownProps {
@@ -56,7 +56,7 @@ export function CategoryDrilldown({ tree, onNavigate }: CategoryDrilldownProps) 
             <div className="flex-1 overflow-y-auto py-1">
                 {current && (
                     <Link
-                        href={browseHref(current.id)}
+                        href={browseHref(path)}
                         onClick={onNavigate}
                         className="text-brand-700 dark:text-brand-300 border-border hover:bg-muted flex items-center justify-between border-b px-4 py-2.5 text-sm font-semibold"
                     >
@@ -79,7 +79,7 @@ export function CategoryDrilldown({ tree, onNavigate }: CategoryDrilldownProps) 
                     ) : (
                         <Link
                             key={node.id}
-                            href={browseHref(node.id)}
+                            href={browseHref([...path, node])}
                             onClick={onNavigate}
                             className="text-foreground hover:bg-muted flex items-center px-4 py-2.5 text-sm transition-colors"
                         >

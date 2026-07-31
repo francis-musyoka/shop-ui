@@ -5,6 +5,7 @@ export const BrandSchema = z.object({
     id: CUID,
     name: z.string(),
     slug: z.string(),
+    productCount: z.number().int().nonnegative().optional(),
 });
 
 export type Brand = z.infer<typeof BrandSchema>;

@@ -90,7 +90,7 @@ describe("ProductPageClient", () => {
         // as plain text rather than a link — see the commented-out Link in the component.
         expect(screen.getByText("Shop Two")).toBeInTheDocument();
         expect(screen.queryByRole("link", { name: "Shop Two" })).not.toBeInTheDocument();
-        expect(screen.getByText(/Status:\s*New/)).toBeInTheDocument();
+        expect(screen.getByText("New")).toBeInTheDocument();
     });
 
     it("shows the seller count from offerCount", () => {

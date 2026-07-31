@@ -11,14 +11,14 @@ const CONDITION_OPTIONS = CONDITIONS.map((c) => ({
     label: c.charAt(0) + c.slice(1).toLowerCase(),
 }));
 
-const FILTER_KEYS = ["categoryId", "brandId", "condition", "minPrice", "maxPrice"];
+const FILTER_KEYS = ["category", "brand", "condition", "minPrice", "maxPrice"];
 
 export function FilterPanel({
     categories,
     brands,
 }: {
-    categories: { id: string; name: string }[];
-    brands: { id: string; name: string }[];
+    categories: { id: string; name: string; slug: string }[];
+    brands: { id: string; name: string; slug: string }[];
 }) {
     const searchParams = useSearchParams();
     const hasActiveFilters = FILTER_KEYS.some((k) => searchParams.has(k));
@@ -39,14 +39,14 @@ export function FilterPanel({
 
             <FacetCheckboxGroup
                 title="Category"
-                paramKey="categoryId"
-                options={categories.map((c) => ({ value: c.id, label: c.name }))}
+                paramKey="category"
+                options={categories.map((c) => ({ value: c.slug, label: c.name }))}
                 wrap
             />
             <FacetCheckboxGroup
                 title="Brand"
-                paramKey="brandId"
-                options={brands.map((b) => ({ value: b.id, label: b.name }))}
+                paramKey="brand"
+                options={brands.map((b) => ({ value: b.slug, label: b.name }))}
                 wrap
             />
             <PriceFacet />

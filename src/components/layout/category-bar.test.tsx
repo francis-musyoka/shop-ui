@@ -17,7 +17,7 @@ describe("CategoryBar", () => {
         expect(screen.getByRole("button", { name: /^all$/i })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Category 0" })).toHaveAttribute(
             "href",
-            "/browse?categoryId=cat0",
+            "/browse?category=category-0",
         );
         expect(screen.getByRole("link", { name: "Category 7" })).toBeInTheDocument();
         expect(screen.queryByRole("link", { name: "Category 8" })).not.toBeInTheDocument();

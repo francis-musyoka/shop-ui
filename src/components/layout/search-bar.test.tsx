@@ -66,8 +66,8 @@ describe("SearchBar", () => {
 
     it("renders category dropdown trigger when categories provided", () => {
         const categories = [
-            { id: "cat1", name: "Electronics" },
-            { id: "cat2", name: "Fashion" },
+            { id: "cat1", name: "Electronics", slug: "electronics" },
+            { id: "cat2", name: "Fashion", slug: "fashion" },
         ];
         render(<SearchBar categories={categories} />);
         expect(screen.getByRole("button", { name: /search category/i })).toBeInTheDocument();

@@ -13,8 +13,8 @@ vi.mock("next/navigation", () => ({
 
 import { FilterPanel } from "./filter-panel";
 
-const categories = [{ id: "c1", name: "Electronics" }];
-const brands = [{ id: "b1", name: "Apple" }];
+const categories = [{ id: "c1", name: "Electronics", slug: "electronics" }];
+const brands = [{ id: "b1", name: "Apple", slug: "apple" }];
 
 beforeEach(() => {
     pushMock.mockReset();
@@ -37,7 +37,7 @@ describe("FilterPanel", () => {
     });
 
     it("shows Clear all (to /browse) when a filter is active", () => {
-        currentParams = new URLSearchParams("brandId=b1");
+        currentParams = new URLSearchParams("brand=b1");
         render(<FilterPanel categories={categories} brands={brands} />);
         expect(screen.getByRole("link", { name: /clear all/i })).toHaveAttribute("href", "/browse");
     });

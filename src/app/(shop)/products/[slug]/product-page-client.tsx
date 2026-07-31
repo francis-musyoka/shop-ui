@@ -14,7 +14,7 @@ import { ConditionBadge } from "@/components/shop/condition-badge";
 import { OffersPanel } from "@/components/shop/offers-panel";
 import { deriveBuybox, findVariant, galleryImageUrls } from "@/lib/product-detail";
 import { FEATURES } from "@/lib/features";
-import { formatPrice } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 
 export function ProductPageClient({ product }: { product: ProductDetail }) {
     const initialVariant =
@@ -44,7 +44,7 @@ export function ProductPageClient({ product }: { product: ProductDetail }) {
                 <div className="md:col-span-4">
                     <div className="flex items-center justify-between">
                         <Link
-                            href={`/browse?brandId=${product.brand.id}`}
+                            href={`/browse?brand=${product.brand.slug}`}
                             className="text-brand-600 dark:text-brand-400 text-sm font-medium hover:underline"
                         >
                             {product.brand.name} &rsaquo;

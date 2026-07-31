@@ -35,12 +35,18 @@ export function CategoryBar({ tree }: CategoryBarProps) {
                     {visible.map((cat) => (
                         <Link
                             key={cat.id}
-                            href={`/browse?categoryId=${cat.id}`}
+                            href={`/browse?category=${cat.slug}`}
                             className="text-brand-100 shrink-0 rounded-sm px-2.5 py-1 text-sm hover:bg-white/10 hover:text-white"
                         >
                             {cat.name}
                         </Link>
                     ))}
+                    <Link
+                        href="/seller"
+                        className="text-brand-100 shrink-0 rounded-sm px-2.5 py-1 text-sm hover:bg-white/10 hover:text-white"
+                    >
+                        Sell
+                    </Link>
 
                     {/* /deals route not built yet — commented until built (do not delete):
                     <Link

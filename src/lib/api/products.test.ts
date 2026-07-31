@@ -56,16 +56,18 @@ describe("searchProducts", () => {
     it("serializes array filters as CSV and passes sort through", async () => {
         mockFetchResponse(productFixtures.searchSuccess);
         await searchProducts({
-            categoryId: ["cat1id0000000000000000001", "cat2id0000000000000000002"],
-            brandId: ["brand1id00000000000000001"],
+            category: ["electronics/phones/phone-cases", "automotive/car-accessories"],
+            brand: ["apple"],
             condition: ["NEW", "USED"],
             sort: "price_asc",
         });
         const url = (globalThis.fetch as Mock).mock.calls[0]![0] as string;
         const decoded = decodeURIComponent(url);
-        expect(decoded).toContain("categoryId=cat1id0000000000000000001,cat2id0000000000000000002");
+        expect(decoded).toContain(
+            "category=electronics/phones/phone-cases,automotive/car-accessories",
+        );
         expect(decoded).toContain("condition=NEW,USED");
-        expect(decoded).toContain("brandId=brand1id00000000000000001");
+        expect(decoded).toContain("brand=apple");
         expect(decoded).toContain("sort=price_asc");
     });
 });
