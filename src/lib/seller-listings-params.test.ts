@@ -13,7 +13,7 @@ describe("parseListingParams", () => {
         expect(f).toEqual({
             status: [],
             condition: [],
-            categoryId: [],
+            category: [],
             search: undefined,
             sort: "newest",
             page: 1,
@@ -31,15 +31,15 @@ describe("parseListingParams", () => {
         expect(parseListingParams({ status: "BOGUS" }).status).toEqual([]);
     });
 
-    it("splits CSV condition and categoryId, mapping q to search", () => {
+    it("splits CSV condition and category, mapping q to search", () => {
         const f = parseListingParams({
             q: "phone",
             condition: "NEW,USED",
-            categoryId: "cat1,cat2",
+            category: "electronics/phones,fashion",
         });
         expect(f.search).toBe("phone");
         expect(f.condition).toEqual(["NEW", "USED"]);
-        expect(f.categoryId).toEqual(["cat1", "cat2"]);
+        expect(f.category).toEqual(["electronics/phones", "fashion"]);
     });
 
     it("drops an invalid condition value", () => {
@@ -67,7 +67,7 @@ describe("toMyOffersParams", () => {
         const params = toMyOffersParams({
             status: ["ACTIVE"],
             condition: ["NEW", "USED"],
-            categoryId: ["cat1"],
+            category: ["electronics/phones"],
             search: "phone",
             sort: "price_desc",
             page: 2,
@@ -75,7 +75,7 @@ describe("toMyOffersParams", () => {
         expect(params).toEqual({
             status: "ACTIVE",
             condition: "NEW,USED",
-            categoryId: "cat1",
+            category: "electronics/phones",
             search: "phone",
             sort: "price_desc",
             page: 2,
@@ -87,7 +87,7 @@ describe("toMyOffersParams", () => {
         const params = toMyOffersParams({
             status: [],
             condition: [],
-            categoryId: [],
+            category: [],
             search: undefined,
             sort: "newest",
             page: 1,

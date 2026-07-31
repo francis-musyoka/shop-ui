@@ -26,7 +26,7 @@ export const PAGE_SIZE = 10;
 export interface ListingFilters {
     status: OfferStatusValue[];
     condition: ConditionValue[];
-    categoryId: string[];
+    category: string[];
     search: string | undefined;
     sort: SellerSortValue;
     page: number;
@@ -62,7 +62,7 @@ export function parseListingParams(raw: RawSearchParams): ListingFilters {
         (CONDITIONS as readonly string[]).includes(c),
     );
 
-    const categoryId = csv(raw.categoryId);
+    const category = csv(raw.category);
 
     const search = first(raw.q)?.trim() || undefined;
 
@@ -74,7 +74,7 @@ export function parseListingParams(raw: RawSearchParams): ListingFilters {
     const pageNum = toNumber(raw.page);
     const page = pageNum && pageNum >= 1 ? Math.floor(pageNum) : 1;
 
-    return { status, condition, categoryId, search, sort, page };
+    return { status, condition, category, search, sort, page };
 }
 
 // Loosely-typed query shape `getMyOffers` (src/lib/api/shops.ts, Task 0) accepts —
@@ -83,7 +83,7 @@ export function parseListingParams(raw: RawSearchParams): ListingFilters {
 export type MyOffersQuery = Record<string, string | number | boolean | undefined | null> & {
     status?: OfferStatusValue;
     condition?: string;
-    categoryId?: string;
+    category?: string;
     search?: string;
     sort?: SellerSortValue;
     page?: number;
@@ -94,7 +94,7 @@ export function toMyOffersParams(f: ListingFilters): MyOffersQuery {
     const params: MyOffersQuery = { page: f.page, limit: PAGE_SIZE };
     if (f.status.length) params.status = f.status[0];
     if (f.condition.length) params.condition = f.condition.join(",");
-    if (f.categoryId.length) params.categoryId = f.categoryId.join(",");
+    if (f.category.length) params.category = f.category.join(",");
     if (f.search) params.search = f.search;
     if (f.sort !== DEFAULT_SELLER_SORT) params.sort = f.sort;
     return params;
