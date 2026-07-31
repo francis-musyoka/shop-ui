@@ -30,7 +30,7 @@ describe("CategoryDrilldown", () => {
         expect(screen.getByRole("button", { name: "Electronics" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Fashion" })).toHaveAttribute(
             "href",
-            "/browse?categoryId=fashion",
+            "/browse?category=fashion",
         );
     });
 
@@ -40,12 +40,12 @@ describe("CategoryDrilldown", () => {
         await user.click(screen.getByRole("button", { name: "Electronics" }));
         expect(screen.getByRole("link", { name: /shop all electronics/i })).toHaveAttribute(
             "href",
-            "/browse?categoryId=electronics",
+            "/browse?category=electronics",
         );
         expect(screen.getByRole("button", { name: "Phones" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Tablets" })).toHaveAttribute(
             "href",
-            "/browse?categoryId=tablets",
+            "/browse?category=electronics/tablets",
         );
     });
 
@@ -56,7 +56,7 @@ describe("CategoryDrilldown", () => {
         await user.click(screen.getByRole("button", { name: "Phones" }));
         expect(screen.getByRole("link", { name: "Smartphones" })).toHaveAttribute(
             "href",
-            "/browse?categoryId=smartphones",
+            "/browse?category=electronics/phones/smartphones",
         );
     });
 
