@@ -13,7 +13,7 @@ import { Search, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Category } from "@/lib/schemas/category";
 
-type CategoryOption = Pick<Category, "id" | "name">;
+type CategoryOption = Pick<Category, "id" | "name" | "slug">;
 
 interface SearchBarProps {
     placeholder?: string;
@@ -22,7 +22,7 @@ interface SearchBarProps {
     categories?: CategoryOption[];
 }
 
-const ALL_OPTION = { id: "all", name: "All" } as const;
+const ALL_OPTION = { id: "all", name: "All", slug: "all" } as const;
 
 export function SearchBar({
     placeholder = "Search products...",
@@ -64,7 +64,7 @@ export function SearchBar({
             const q = (formData.get("q") as string).trim();
             const params = new URLSearchParams();
             if (q) params.set("q", q);
-            if (selected.id !== "all") params.set("categoryId", selected.id);
+            if (selected.id !== "all") params.set("category", selected.slug);
             const qs = params.toString();
             router.push(qs ? `/browse?${qs}` : "/browse");
         },
