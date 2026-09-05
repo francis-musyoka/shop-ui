@@ -1,0 +1,89 @@
+{
+    "list": {
+        "success": true,
+        "data": [
+            {
+                "id": "cnv1aaaaaaaaaaaaaaaaaaaa",
+                "side": "CUSTOMER",
+                "shop": {
+                    "id": "shp1aaaaaaaaaaaaaaaaaaaa",
+                    "name": "TechHub Nairobi",
+                    "slug": "techhub-nairobi",
+                    "logoUrl": null
+                },
+                "customer": {
+                    "id": "usr1aaaaaaaaaaaaaaaaaaaa",
+                    "firstName": "Eric",
+                    "lastName": "Musyoka",
+                    "avatarUrl": null
+                },
+                "unreadCount": 2,
+                "archived": false,
+                "blocked": false,
+                "blockedByMe": false,
+                "lastMessageAt": "2026-09-04T07:41:00.000Z",
+                "lastMessagePreview": "Deal. I'll take it.",
+                "lastSenderSide": "CUSTOMER",
+                "createdAt": "2026-09-03T09:00:00.000Z"
+            }
+        ],
+        "pagination": { "page": 1, "limit": 20, "total": 1, "totalPages": 1 }
+    },
+    "messages": {
+        "success": true,
+        "direction": "before",
+        "nextCursor": null,
+        "data": [
+            {
+                "id": "msg3aaaaaaaaaaaaaaaaaaaa",
+                "senderId": "usr1aaaaaaaaaaaaaaaaaaaa",
+                "senderSide": "CUSTOMER",
+                "body": "Listing was deleted but I remember the details.",
+                "imageUrl": null,
+                "listing": {
+                    "offerId": null,
+                    "title": "Sony WH-1000XM5",
+                    "imageUrl": "https://cdn.example.com/xm5.jpg",
+                    "price": 42000,
+                    "condition": "NEW"
+                },
+                "createdAt": "2026-09-04T08:00:00.000Z"
+            },
+            {
+                "id": "msg2aaaaaaaaaaaaaaaaaaaa",
+                "senderId": "usr1aaaaaaaaaaaaaaaaaaaa",
+                "senderSide": "CUSTOMER",
+                "body": "Deal. I'll take it.",
+                "imageUrl": null,
+                "listing": null,
+                "createdAt": "2026-09-04T07:41:00.000Z"
+            },
+            {
+                "id": "msg1aaaaaaaaaaaaaaaaaaaa",
+                "senderId": "usr1aaaaaaaaaaaaaaaaaaaa",
+                "senderSide": "CUSTOMER",
+                "body": "Hi, is this still available?",
+                "imageUrl": null,
+                "listing": {
+                    "offerId": "ofr1aaaaaaaaaaaaaaaaaaaa",
+                    "title": "Sony WH-1000XM5",
+                    "imageUrl": "https://cdn.example.com/xm5.jpg",
+                    "price": 42000,
+                    "condition": "NEW"
+                },
+                "createdAt": "2026-09-04T07:24:00.000Z"
+            },
+            {
+                "id": "msg0aaaaaaaaaaaaaaaaaaaa",
+                "senderId": "usr2aaaaaaaaaaaaaaaaaaaa",
+                "senderSide": "SHOP",
+                "body": null,
+                "decryptionFailed": true,
+                "imageUrl": null,
+                "listing": null,
+                "createdAt": "2026-09-04T07:00:00.000Z"
+            }
+        ]
+    },
+    "unreadSummary": { "success": true, "customer": 3, "shop": 0 }
+}
